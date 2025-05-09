@@ -1,0 +1,21 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<div class="bg-light py-3 border-bottom">
+    <div class="container d-flex justify-content-center">
+        <form class="d-flex w-50" method="get" asp-page="/Search">
+            <div class="input-group w-100">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="bi bi-search"></i> <!-- Bootstrap zoekicoon -->
+                </span>
+                <input class="form-control border-start-0"
+                       type="search"
+                       name="query"
+                       placeholder="Search..."
+                       aria-label="Search" />
+            </div>
+        </form>
+    </div>
+</div>
