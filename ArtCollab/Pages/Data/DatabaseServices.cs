@@ -11,7 +11,7 @@ namespace ArtCollab.Pages.Data
 
         public DatabaseServices(string ServicesString)
         {
-            // Haal de connection string op uit appsettings.json
+            // Haal de connection string op uit appsettings.json.
             _ServicesString = ServicesString;
         }
 
