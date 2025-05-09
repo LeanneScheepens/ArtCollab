@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using ArtCollab.Pages.Data;
+using ArtCollab.Data;
 
 namespace ArtCollab.Pages
 {
     public class TestConnection : PageModel
     {
-        private readonly DatabaseServices _dbService;
+        private readonly DatabaseService _dbService;
 
         public string ConnectionStatus { get; set; }
 
@@ -14,7 +14,7 @@ namespace ArtCollab.Pages
         {
             // Get the connection string from appsettings.json
             string connString = config.GetConnectionString("DefaultConnection");
-            _dbService = new DatabaseServices(connString);
+            _dbService = new DatabaseService(connString);
         }
 
         public void OnGet()
