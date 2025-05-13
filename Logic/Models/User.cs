@@ -18,14 +18,15 @@
         public string ProfilePicture { get; set; }
         public string Biography { get; set; }
 
-        public User (int id, string name, string email, string password, string profilePicture, string biography)
+        public User(int id, string name, string email, string password, string profilePicture, string biography)
         {
-            _Id = id;
-            _Name = name;
-            _Email = email;
-            _Password = password;
-            _ProfilePicture = profilePicture;
-            _Biography = biography;
+            Id = id;
+            Name = name;
+            Email = email;
+            Password = password;
+            ProfilePicture = profilePicture;
+            Biography = biography;
         }
+
     }
 }

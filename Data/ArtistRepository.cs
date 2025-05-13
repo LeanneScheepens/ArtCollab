@@ -19,41 +19,42 @@ namespace Data
 
         public List<Artist> GetArtists()
         {
-            List<Artist> artists = new List<Artist>();  // Correcte declaratie van de lijst
+            List<Artist> artists = new List<Artist>();
 
             using (SqlConnection connection = GetConnection())
             {
                 connection.Open();
 
                 string sql = @"SELECT 
-                            a.ArtistId AS ArtistId,
-                            u.Name AS ArtistName,
-                            u.Password AS ArtistPassword,
-                            u.Email AS ArtistEmail,
-                            u.ProfilePicture AS ArtistProfilePicture,
-                            u.Biography AS ArtistBiography,
-                            a.Role AS ArtistRole
-                       FROM Artist a
-                       JOIN User u ON a.UserId = u.Id";
+                        a.ArtistId,
+                        u.Name,
+                        u.Password,
+                        u.Email,
+                        u.ProfilePicture,
+                        u.Biography
+                      FROM Artist a
+                      JOIN [User] u ON a.UserId = u.Id";
+                //rol moet er nog bij
 
                 using var command = new SqlCommand(sql, connection);
                 using var reader = command.ExecuteReader();
+
                 while (reader.Read())
                 {
                     var artist = new Artist(
                         reader.GetInt32(0),   // ArtistId
                         reader.GetString(1),  // Name
-                        reader.GetString(2),  // Password
                         reader.GetString(3),  // Email
+                        reader.GetString(2),  // Password
                         reader.GetString(4),  // ProfilePicture
                         reader.GetString(5),  // Biography
-                        reader.GetInt32(6)    // Role
+                        0                     // Dummy Role (niet meer in DB aanwezig)
                     );
-                    artists.Add(artist);  // Voeg de artiest toe aan de lijst
+                    artists.Add(artist);
                 }
             }
 
-            return artists;  // Retourneer de lijst van artiesten
+            return artists;
         }
 
         public Artist GetArtistById(int id)
@@ -62,11 +63,17 @@ namespace Data
             {
                 connection.Open();
 
-                string sql = @"
-                        SELECT a.ArtistId, u.Name, u.Password, u.Email, u.ProfilePicture, u.Biography, a.Role
-                        FROM Artist a
-                        JOIN User u ON a.UserId = u.Id
-                        WHERE a.ArtistId = @Id";
+                string sql = @"SELECT 
+                        a.ArtistId, 
+                        u.Name, 
+                        u.Password, 
+                        u.Email, 
+                        u.ProfilePicture, 
+                        u.Biography
+                      FROM Artist a
+                      JOIN [User] u ON a.UserId = u.Id
+                      WHERE a.ArtistId = @Id";
+                //rol moet er nog bij
 
                 using var command = new SqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@Id", id);
@@ -75,21 +82,20 @@ namespace Data
                 if (reader.Read())
                 {
                     return new Artist(
-                              reader.GetInt32(0),   //ArtistId
-                              reader.GetString(1),  //name
-                              reader.GetString(2),  //password
-                              reader.GetString(3),  //email
-                              reader.GetString(4),  //profilePicture
-                              reader.GetString(5),  //biography
-                              reader.GetInt32(6)    //ArtistRole 
+                        reader.GetInt32(0),   // ArtistId
+                        reader.GetString(1),  // Name
+                        reader.GetString(3),  // Email
+                        reader.GetString(2),  // Password
+                        reader.GetString(4),  // ProfilePicture
+                        reader.GetString(5),  // Biography
+                        0                     // Dummy Role
                     );
                 }
-                else
-                {
-                    return null;
-                }
+
+                return null;
             }
         }
+
         public void DeleteArtist(int id)
         {
             using (SqlConnection connection = GetConnection())
@@ -113,40 +119,48 @@ namespace Data
 
                 try
                 {
-                    string insertArtistUserSql = @"INSERT INTO User (Name, Password, Email, ProfilePicture, Biography, Role) 
-                                           OUTPUT INSERTED.Id 
-                                           VALUES (@Name, @Password, @Email, @ProfilePicture, @Biography, @Role)";
-                    int artistUserId;
-                    using (var cmd = new SqlCommand(insertArtistUserSql, connection, transaction))
+                    // Stap 1: voeg gebruiker toe aan [User]
+                    string insertUserSql = @"
+                INSERT INTO [User] (Name, Email, Password, ProfilePicture, Biography)
+                OUTPUT INSERTED.Id
+                VALUES (@Name, @Email, @Password, @ProfilePicture, @Biography)";
+                    //rol moet er nog bij
+
+                    int userId;
+                    using (var userCmd = new SqlCommand(insertUserSql, connection, transaction))
                     {
-                        cmd.Parameters.AddWithValue("@Name", artist.Name);
-                        cmd.Parameters.AddWithValue("@Password", artist.Password);
-                        cmd.Parameters.AddWithValue("@Email", artist.Email);
-                        cmd.Parameters.AddWithValue("@ProfilePicture", artist.ProfilePicture);
-                        cmd.Parameters.AddWithValue("@Biography", artist.Biography);
-                        cmd.Parameters.AddWithValue("@Role", (int)artist.Role); // Store 
-                        artistUserId = (int)cmd.ExecuteScalar(); 
+                        userCmd.Parameters.AddWithValue("@Name", artist.Name);
+                        userCmd.Parameters.AddWithValue("@Email", artist.Email);
+                        userCmd.Parameters.AddWithValue("@Password", artist.Password);
+                        userCmd.Parameters.AddWithValue("@ProfilePicture", artist.ProfilePicture ?? (object)DBNull.Value);
+                        userCmd.Parameters.AddWithValue("@Biography", artist.Biography ?? (object)DBNull.Value);
+
+                        userId = (int)userCmd.ExecuteScalar();
                     }
 
-                    // Insert into the Artist table
+                    // Stap 2: voeg artiest toe aan Artist + RoleId
                     string insertArtistSql = "INSERT INTO Artist (UserId) VALUES (@UserId)";
-                    using (var cmd = new SqlCommand(insertArtistSql, connection, transaction))
+                    using (var artistCmd = new SqlCommand(insertArtistSql, connection, transaction))
                     {
-                        cmd.Parameters.AddWithValue("@UserId", artistUserId);
-                        cmd.ExecuteNonQuery();
+                        artistCmd.Parameters.AddWithValue("@UserId", userId);
+                        artistCmd.ExecuteNonQuery();
                     }
 
-                    transaction.Commit();  // Commit the transaction if everything was successful
+                    // Eventueel stap 3: voeg artist-role mapping toe aan een aparte tabel (indien je die hebt)
+
+                    transaction.Commit();
                 }
                 catch
                 {
-                    transaction.Rollback();  // Rollback if any exception occurs
+                    transaction.Rollback();
                     throw;
                 }
             }
         }
 
     }
+
 }
+
 
     
