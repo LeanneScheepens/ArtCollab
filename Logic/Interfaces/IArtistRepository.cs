@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ArtCollab.Models;
+using Logic.Models;
 
 namespace Logic.Interfaces
 {
-    public class IArtistRepository
+    public interface IArtistRepository
     {
-        public void CreateArtist(Artist artist);
-        public List<Artist> GetArtist();
-        public void DeleteArtist(int id);
-
+        List<Artist> GetArtists();
+        Artist GetArtistById(int id);
+        void CreateArtist(Artist artist);    
+        void DeleteArtist(int id);
     }
 }
