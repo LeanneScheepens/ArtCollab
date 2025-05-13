@@ -3,15 +3,15 @@
     public class User
     {
 
-        private static int seed = 1;
-        private int id;
-        private string name;
-        private string email;
-        private string password;
-        private string profilePicture;
-        private string biography;
+        //private static int seed = 1;
+        private int _Id;
+        private string _Name;
+        private string _Email;
+        private string _Password;
+        private string _ProfilePicture;
+        private string _Biography;
 
-        public int Id { get; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }   
         public string Password { get; set; }
@@ -20,13 +20,12 @@
 
         public User (int id, string name, string email, string password, string profilePicture, string biography)
         {
-            this.id = seed;
-            seed++;
-            this.name = name;
-            this.email = email;
-            this.password = password;
-            this.profilePicture = profilePicture;
-            this.biography = biography;
+            _Id = id;
+            _Name = name;
+            _Email = email;
+            _Password = password;
+            _ProfilePicture = profilePicture;
+            _Biography = biography;
         }
     }
 }
