@@ -44,7 +44,7 @@ namespace ArtCollab.Pages
             _artistManager.CreateArtist(newArtist);
 
             // Redirect naar de juiste pagina na succesvolle creatie van de artiest
-            return RedirectToPage("?????"); // Werk dit bij naar de juiste pagina
+            return RedirectToPage("ArtistOverview"); // Werk dit bij naar de juiste pagina
         }
 
         // Helper method to hash the password securely

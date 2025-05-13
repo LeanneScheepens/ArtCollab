@@ -14,6 +14,7 @@ namespace Data
 {
     public class ArtistRepository : DatabaseService, IArtistRepository
     {
+
         public ArtistRepository(string ServicesString) : base(ServicesString) { } //to use the database service
 
         public List<Artist> GetArtists()

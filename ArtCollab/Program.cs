@@ -1,12 +1,28 @@
 using System.Text;
 using ArtCollab;
-using ArtCollab.Interface;
+using Data;
+using Logic.Interfaces;
+using Logic.Managers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+
+
+
+//Managers
+builder.Services.AddScoped<ArtistManager>();
+
+//Repositories
+builder.Services.AddScoped<IArtistRepository>(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var connectionString = config.GetConnectionString("DefaultConnection");
+    return new ArtistRepository(connectionString);
+});
+
 
 var app = builder.Build();
 

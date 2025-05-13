@@ -1,0 +1,36 @@
+﻿@page
+@model ArtCollab.Pages.ArtistOverviewModel
+@{
+	ViewData["Title"] = "Artist Overview";
+}
+
+
+<h2>Artist Overview</h2>
+<form method="post" asp-page-handler="DeleteSelected">
+	<div class="d-flex justify-content-end mb-2">
+		<button type="submit" class="btn btn-danger">Delete</button>
+	</div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Select</th>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Email</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var artist in Model.Artists)
+			{
+				<tr>
+					<td>
+						<input type="checkbox" name="SelectedCustomerIds" value="@artist.Id" />
+					</td>
+					<td>@artist.Id</td>
+					<td>@artist.Name</td>
+					<td>@artist.Email</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</form>
