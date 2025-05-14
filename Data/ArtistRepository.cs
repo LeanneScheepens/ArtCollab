@@ -157,7 +157,40 @@ namespace Data
                 }
             }
         }
+        public void UpdateArtist(Artist artist)
+        {
+            using (SqlConnection connection = GetConnection())
+            {
+                connection.Open();
 
+                string sql = @"
+                         UPDATE u
+                         SET u.Name = @Name,
+                         u.Password = @Password
+                         u.Email = @Email
+                         u.ProfilePicture = @ProfilePicture
+                         u.Biography = @Biography
+                        FROM User u
+                        JOIN Artist a ON a.UserId = p.Id
+                        WHERE a.ArtistId = @ArtistId;
+
+                       UPDATE Artist
+                       WHERE ArtistId = @ArtistId;";
+
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@Name", artist.Name);
+                    command.Parameters.AddWithValue("@Password", artist.Password);
+                    command.Parameters.AddWithValue("@Email", artist.Email);
+                    command.Parameters.AddWithValue("@ProfilePicture", artist.ProfilePicture ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Biography", artist.Biography ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@CustomerId", artist.Id);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
     }
 
 }

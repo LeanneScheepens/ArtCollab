@@ -9,7 +9,8 @@ namespace ArtCollab.Pages
 {
     public class ArtistOverviewModel(ArtistManager artistManager) : PageModel
     {
-
+        [BindProperty]
+        public List<int> SelectedArtistIds { get; set; } = new();
         private readonly ArtistManager _artistManager = artistManager;
 
         public List<Artist> Artists { get; set; } = [];
@@ -17,6 +18,15 @@ namespace ArtCollab.Pages
         public void OnGet()
         {
            Artists = _artistManager.GetArtists();
+        }
+        public IActionResult OnPostDeleteSelected()
+        {
+            if (SelectedArtistIds.Any())
+            {
+                _artistManager.DeleteArtist(SelectedArtistIds);
+            }
+
+            return RedirectToPage("/ArtistOverview");
         }
     }
 }

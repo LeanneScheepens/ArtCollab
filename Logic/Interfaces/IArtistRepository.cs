@@ -13,5 +13,6 @@ namespace Logic.Interfaces
         Artist GetArtistById(int id);
         void CreateArtist(Artist artist);    
         void DeleteArtist(int id);
+        void UpdateArtist(Artist artist);
     }
 }
