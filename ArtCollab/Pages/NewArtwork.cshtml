@@ -1,0 +1,45 @@
+﻿@page
+@model ArtCollab.Pages.NewArtworkModel
+@{
+    ViewData["Title"] = "New Artwork";
+}
+
+<h2>Create New Artwork</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label asp-for="ArtworkVM.Title" class="form-label">Title</label>
+        <input asp-for="ArtworkVM.Title" class="form-control" />
+        <span asp-validation-for="ArtworkVM.Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ArtworkVM.Description" class="form-label">Description</label>
+        <textarea asp-for="ArtworkVM.Description" class="form-control"></textarea>
+        <span asp-validation-for="ArtworkVM.Description" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ArtworkVM.Owner" class="form-label">Owner</label>
+        <input asp-for="ArtworkVM.Owner" class="form-control" />
+        <span asp-validation-for="ArtworkVM.Owner" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ArtworkVM.ImageFile" class="form-label">Upload Image</label>
+        <input asp-for="ArtworkVM.ImageFile" type="file" class="form-control" accept=".png,image/png" />
+        <span asp-validation-for="ArtworkVM.ImageFile" class="text-danger"></span>
+    </div>
+
+@*     <div class="mb-3">
+        <label asp-for="ArtworkVM.UserIds" class="form-label">User IDs (comma-separated)</label>
+        <input asp-for="ArtworkVM.UserIds" class="form-control" />
+        <span asp-validation-for="ArtworkVM.UserIds" class="text-danger"></span>
+    </div> *@
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
