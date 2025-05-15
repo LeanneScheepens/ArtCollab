@@ -1,0 +1,19 @@
+﻿@page "{id:int}"
+@model ArtCollab.Pages.ArtworkDetailModel
+@{
+    ViewData["Title"] = "Artwork Detail";
+}
+
+<div class="d-flex gap-2 mb-3">
+    <a asp-page="/DeleteArtwork" asp-route-id="@Model.Artwork.Id" class="btn btn-danger">Delete</a>
+    <a asp-page="/ArtworkOverview" class="btn btn-secondary">Back</a>
+</div>
+
+
+<h2>@Model.Artwork.Title</h2>
+
+<img src="@Model.Artwork.ImageUrl" alt="@Model.Artwork.Title" class="img-fluid rounded mb-3" style="max-height: 400px;" />
+
+<p><strong>Description:</strong> @Model.Artwork.Description</p>
+<p><strong>Owner:</strong> @Model.Artwork.Owner</p>
+<p><strong>Uploaded:</strong> @Model.Artwork.UploadDate.ToString("dd-MM-yyyy")</p>
