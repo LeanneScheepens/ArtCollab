@@ -14,6 +14,7 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 //Managers
 builder.Services.AddScoped<ArtistManager>();
+builder.Services.AddScoped<ArtworkManager>();
 
 //Repositories
 builder.Services.AddScoped<IArtistRepository>(provider =>
@@ -21,6 +22,13 @@ builder.Services.AddScoped<IArtistRepository>(provider =>
     var config = provider.GetRequiredService<IConfiguration>();
     var connectionString = config.GetConnectionString("DefaultConnection");
     return new ArtistRepository(connectionString);
+});
+
+builder.Services.AddScoped<IArtworkRepository>(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var connectionString = config.GetConnectionString("DefaultConnection");
+    return new ArtworkRepository(connectionString);
 });
 
 
