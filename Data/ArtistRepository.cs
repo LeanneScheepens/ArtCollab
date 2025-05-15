@@ -111,7 +111,6 @@ namespace Data
 
         public void CreateArtist(Artist artist)
         {
-            Console.WriteLine("Repo:" + artist.Name);
             using (SqlConnection connection = GetConnection())
             {
                 connection.Open();

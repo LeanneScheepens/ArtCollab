@@ -33,7 +33,6 @@ namespace Logic.Managers
         public void CreateArtist(Artist artist)
         {
             _artistRepository.CreateArtist(artist);
-            Console.WriteLine("Manager:" + artist.Name);
         }
     }
 }

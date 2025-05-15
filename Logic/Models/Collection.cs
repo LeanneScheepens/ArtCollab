@@ -14,8 +14,7 @@
 
         public Collection (int id, string name, string uploadDate)
         {
-            this.id = seed;
-            seed++;
+            Id = id;
             this.name = name;
             this.uploadDate = uploadDate;
         }
