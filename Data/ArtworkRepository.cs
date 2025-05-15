@@ -41,8 +41,8 @@ namespace Data
                     var artwork = new Artwork(
                         reader.GetInt32(0),   // ArtworkId
                         reader.GetString(1),  // title
-                        reader.GetString(3),  // description
-                        reader.GetString(2),  // owner
+                        reader.GetString(2),  // description
+                        reader.GetString(3),  // owner
                         reader.GetDateTime(4),  // uploadDate
                         reader.GetString(5)   // imageUrl
 
@@ -144,8 +144,8 @@ namespace Data
                     return new Artwork(
                            reader.GetInt32(0),   // ArtworkId
                         reader.GetString(1),  // title
-                        reader.GetString(3),  // description
-                        reader.GetString(2),  // owner
+                        reader.GetString(2),  // description
+                        reader.GetString(3),  // owner
                         reader.GetDateTime(4),  // uploadDate
                         reader.GetString(5)   // imageUrl
                     );
