@@ -44,8 +44,8 @@ namespace Data
                     var artist = new Artist(
                         reader.GetInt32(0),   // ArtistId
                         reader.GetString(1),  // Name
-                        reader.GetString(3),  // Email
                         reader.GetString(2),  // Password
+                        reader.GetString(3),  // Email
                         reader.GetString(4),  // ProfilePicture
                         reader.GetString(5),  // Biography
                         0                     // Dummy Role (niet meer in DB aanwezig)
@@ -84,8 +84,8 @@ namespace Data
                     return new Artist(
                         reader.GetInt32(0),   // ArtistId
                         reader.GetString(1),  // Name
-                        reader.GetString(3),  // Email
                         reader.GetString(2),  // Password
+                        reader.GetString(3),  // Email
                         reader.GetString(4),  // ProfilePicture
                         reader.GetString(5),  // Biography
                         0                     // Dummy Role
