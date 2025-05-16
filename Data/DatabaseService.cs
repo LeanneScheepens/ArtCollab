@@ -13,7 +13,7 @@ namespace ArtCollab.Data
             _ConnectionString = connectionString;
         }
 
-        public SqlConnection GetConnection()
+        public SqlConnection GetConnection() //protected
         {
             if (string.IsNullOrEmpty(_ConnectionString))
             {
