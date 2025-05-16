@@ -44,8 +44,8 @@ namespace Data
                     var artist = new Artist(
                         reader.GetInt32(0),   // ArtistId
                         reader.GetString(1),  // Name
-                        reader.GetString(2),  // Password
-                        reader.GetString(3),  // Email
+                        reader.GetString(3),  // Password
+                        reader.GetString(2),  // Email
                         reader.GetString(4),  // ProfilePicture
                         reader.GetString(5),  // Biography
                         0                     // Dummy Role (niet meer in DB aanwezig)
@@ -84,8 +84,8 @@ namespace Data
                     return new Artist(
                         reader.GetInt32(0),   // ArtistId
                         reader.GetString(1),  // Name
-                        reader.GetString(2),  // Password
-                        reader.GetString(3),  // Email
+                        reader.GetString(3),  // Password
+                        reader.GetString(2),  // Email
                         reader.GetString(4),  // ProfilePicture
                         reader.GetString(5),  // Biography
                         0                     // Dummy Role
@@ -156,43 +156,9 @@ namespace Data
                 }
             }
         }
-        public void UpdateArtist(Artist artist)
-        {
-            using (SqlConnection connection = GetConnection())
-            {
-                connection.Open();
-
-                string sql = @"
-                         UPDATE u
-                         SET u.Name = @Name,
-                         u.Password = @Password
-                         u.Email = @Email
-                         u.ProfilePicture = @ProfilePicture
-                         u.Biography = @Biography
-                        FROM User u
-                        JOIN Artist a ON a.UserId = p.Id
-                        WHERE a.ArtistId = @ArtistId;
-
-                       UPDATE Artist
-                       WHERE ArtistId = @ArtistId;";
-
-
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("@Name", artist.Name);
-                    command.Parameters.AddWithValue("@Password", artist.Password);
-                    command.Parameters.AddWithValue("@Email", artist.Email);
-                    command.Parameters.AddWithValue("@ProfilePicture", artist.ProfilePicture ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@Biography", artist.Biography ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@CustomerId", artist.Id);
-
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
     }
-
 }
+
 
 
     
