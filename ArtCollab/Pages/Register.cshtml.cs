@@ -65,7 +65,7 @@ namespace ArtCollab.Pages
             _userManager.CreateUser(user); 
 
 
-            return RedirectToPage("/Privacy");
+            return RedirectToPage("/Home");
         }
 
         private bool IsValidPassword(string password)

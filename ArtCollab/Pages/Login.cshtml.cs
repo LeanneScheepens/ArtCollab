@@ -39,9 +39,9 @@ namespace ArtCollab.Pages
             }
 
             if (user.Role == Role.Admin)
-                return RedirectToPage("/Admin/Dashboard");
-            else
                 return RedirectToPage("/Privacy");
+            else
+                return RedirectToPage("/Home");
         }
     }
 }
