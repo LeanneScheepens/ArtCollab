@@ -3,7 +3,6 @@
     public class User
     {
 
-        //private static int seed = 1;
         private int _Id;
         private string _Name;
         private string _Email;
