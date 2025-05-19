@@ -13,15 +13,15 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 
 //Managers
-builder.Services.AddScoped<ArtistManager>();
+builder.Services.AddScoped<UserManager>();
 builder.Services.AddScoped<ArtworkManager>();
 
 //Repositories
-builder.Services.AddScoped<IArtistRepository>(provider =>
+builder.Services.AddScoped<IUserRepository>(provider =>
 {
     var config = provider.GetRequiredService<IConfiguration>();
     var connectionString = config.GetConnectionString("DefaultConnection");
-    return new ArtistRepository(connectionString);
+    return new UserRepository(connectionString);
 });
 
 builder.Services.AddScoped<IArtworkRepository>(provider =>

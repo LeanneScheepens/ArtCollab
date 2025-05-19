@@ -8,7 +8,7 @@ namespace Logic.Models
 {
     public enum Role
     {
-        Artist = 1,
-        Admin = 2,
+        Artist,
+        Admin
     }
 }

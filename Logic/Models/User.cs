@@ -1,4 +1,4 @@
-﻿namespace ArtCollab.Models
+﻿namespace Logic.Models
 {
     public class User
     {
@@ -16,6 +16,7 @@
         public string Password { get; set; }
         public string ProfilePicture { get; set; }
         public string Biography { get; set; }
+        public Role Role { get; set; }
 
         public User(int id, string name, string email, string password, string profilePicture, string biography)
         {
