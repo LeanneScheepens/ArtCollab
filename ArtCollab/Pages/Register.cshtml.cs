@@ -31,6 +31,7 @@ namespace ArtCollab.Pages
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        [BindProperty] public string ConfirmPassword { get; set; }
 
         public async Task<IActionResult> OnPost()
         {
@@ -58,7 +59,7 @@ namespace ArtCollab.Pages
             _userManager.CreateUser(user); 
 
 
-            return RedirectToPage("/Login");
+            return RedirectToPage("/Error");
         }
 
         private bool IsValidPassword(string password)
