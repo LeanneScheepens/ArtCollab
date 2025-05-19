@@ -41,7 +41,7 @@ namespace ArtCollab.Pages
             if (user.Role == Role.Admin)
                 return RedirectToPage("/Admin/Dashboard");
             else
-                return RedirectToPage("/Artist/Dashboard");
+                return RedirectToPage("/Privacy");
         }
     }
 }

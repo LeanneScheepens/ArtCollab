@@ -37,9 +37,9 @@ namespace Logic.Managers
 
         public User GetUserByName(string name)
         {
-            return _userRepository.GetUsers()
-                .FirstOrDefault(u => u.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return _userRepository.GetUserByName(name);
         }
+
 
         public Task<User> AuthenticateUser(string name, string password)
         {

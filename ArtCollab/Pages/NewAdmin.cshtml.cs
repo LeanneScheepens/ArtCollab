@@ -1,19 +1,20 @@
 using Logic.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Logic.Managers;
 using Logic.Models;
 using Logic.ViewModels;
+using System.Text.RegularExpressions;
+
 
 namespace ArtCollab.Pages
 {
-    public class RegisterModel : PageModel
+    public class NewAdminModel : PageModel
     {
         private readonly UserManager _userManager;
 
-        public RegisterModel(UserManager userManager)
+        public NewAdminModel(UserManager userManager)
         {
             _userManager = userManager;
         }
@@ -31,18 +32,16 @@ namespace ArtCollab.Pages
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        [BindProperty] public string ConfirmPassword { get; set; }
 
-        public async Task<IActionResult> OnPost()
+        [BindProperty]
+        [Required]
+        [Compare(nameof(Password), ErrorMessage = "Passwords do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
                 return Page();
-            if (Password != ConfirmPassword)
-            {
-                ModelState.AddModelError("ConfirmPassword", "Passwords do not match.");
-                return Page();
-            }
-
 
             if (!IsValidPassword(Password))
             {
@@ -50,29 +49,29 @@ namespace ArtCollab.Pages
                 return Page();
             }
 
-            var existingUser = _userManager.GetUserByName(Name); 
-            if (existingUser != null)
+            var existing = _userManager.GetUserByName(Name);
+            if (existing != null)
             {
                 ModelState.AddModelError("Name", "Username already exists.");
                 return Page();
             }
 
-            var user = new User(0, Name, Email, Password, null, null)
+            var admin = new User(0, Name, Email, Password, null, null)
             {
-                Role = Role.Artist
+                Role = Role.Admin
             };
 
-            _userManager.CreateUser(user); 
-
+            _userManager.CreateUser(admin);
 
             return RedirectToPage("/Privacy");
         }
 
         private bool IsValidPassword(string password)
         {
-            var digits = Regex.Matches(password, @"\d").Count;
-            var letters = Regex.Matches(password, @"[A-Za-z]").Count;
+            int digits = Regex.Matches(password, @"\d").Count;
+            int letters = Regex.Matches(password, @"[A-Za-z]").Count;
             return digits >= 4 && letters >= 3;
         }
     }
 }
+

@@ -60,7 +60,7 @@ namespace Data
                 connection.Open();
 
                 string sql = @"
-            SELECT Id, Name, Email, Password, ProfilePicture, Biography
+            SELECT Id, Name, Email, Password, ProfilePicture, Biography, 'Artist' AS Role
             FROM [User]
             WHERE Name = @Name";
 
@@ -70,16 +70,20 @@ namespace Data
                 using var reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    return new User(
+                    var user = new User(
                         reader.GetInt32(0),
                         reader.GetString(1),
                         reader.GetString(2),
                         reader.GetString(3),
                         reader.IsDBNull(4) ? null : reader.GetString(4),
                         reader.IsDBNull(5) ? null : reader.GetString(5)
-                    );
-                }
+    )
+                    {
+                        Role = Role.Artist
+                    };
+                    return user;
 
+                }
                 return null;
             }
         }
@@ -133,6 +137,15 @@ namespace Data
                         {
                             artistCmd.Parameters.AddWithValue("@UserId", userId);
                             artistCmd.ExecuteNonQuery();
+                        }
+                    }
+                    else if (user.Role == Role.Admin)
+                    {
+                        string insertAdminSql = "INSERT INTO Admin (UserId) VALUES (@UserId)";
+                        using (var adminCmd = new SqlCommand(insertAdminSql, connection, transaction))
+                        {
+                            adminCmd.Parameters.AddWithValue("@UserId", userId);
+                            adminCmd.ExecuteNonQuery();
                         }
                     }
 
