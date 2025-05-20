@@ -45,14 +45,16 @@ namespace Logic.Managers
 
         public Task<User> AuthenticateUser(string name, string password)
         {
-            var users = _userRepository.GetUsers();
+            var user = _userRepository.GetUserByName(name);
 
-            var user = users.FirstOrDefault(u =>
-                u.Name.Equals(name, StringComparison.OrdinalIgnoreCase) &&
-                u.Password == password);
+            if (user != null && PasswordHelper.VerifyPassword(password, user.Password))
+            {
+                return Task.FromResult(user);
+            }
 
-            return Task.FromResult(user);
+            return Task.FromResult<User>(null);
         }
+
         public void RegisterUser(User user)
         {
             user.Password = PasswordHelper.HashPassword(user.Password);
