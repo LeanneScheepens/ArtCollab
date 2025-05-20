@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Logic.Models;
 using Logic.Interfaces;
+using Logic.Utils;
 
 namespace Logic.Managers
 {
@@ -32,7 +33,8 @@ namespace Logic.Managers
 
             public void CreateUser(User user)
             {
-                _userRepository.CreateUser(user);
+            user.Password = PasswordHelper.HashPassword(user.Password);
+            _userRepository.CreateUser(user);
             }
 
         public User GetUserByName(string name)
@@ -50,6 +52,17 @@ namespace Logic.Managers
                 u.Password == password);
 
             return Task.FromResult(user);
+        }
+        public void RegisterUser(User user)
+        {
+            user.Password = PasswordHelper.HashPassword(user.Password);
+            _userRepository.CreateUser(user);
+        }
+
+        public bool ValidateLogin(string name, string password)
+        {
+            var user = _userRepository.GetUserByName(name);
+            return user != null && PasswordHelper.VerifyPassword(password, user.Password);
         }
     }
     }
