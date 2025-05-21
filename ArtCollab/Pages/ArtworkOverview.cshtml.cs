@@ -1,27 +1,41 @@
+
 using ArtCollab.Models;
 using Logic.Managers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 
 namespace ArtCollab.Pages
 {
+    [Authorize]
     public class ArtworkOverviewModel : PageModel
     {
+      
 
+        private readonly ArtworkManager _artworkManager;
 
-              private readonly ArtworkManager _artworkManager;
+        public List<Artwork> Artworks { get; set; }
 
-            public List<Artwork> Artworks { get; set; }
+        public ArtworkOverviewModel(ArtworkManager artworkManager)
+        {
+            _artworkManager = artworkManager;
+        }
 
-            public ArtworkOverviewModel(ArtworkManager artworkManager)
+        public void OnGet()
+        {
+            var currentUser = User.Identity?.Name;
+            if (string.IsNullOrEmpty(currentUser))
             {
-                _artworkManager = artworkManager;
+                Artworks = new List<Artwork>();
+                return;
             }
 
-            public void OnGet()
-            {
-                Artworks = _artworkManager.GetArtworks();
-            }
+            Artworks = _artworkManager.GetArtworks()
+                .Where(a => a.Owner == currentUser)
+                .ToList();
         }
     }
-
+}
