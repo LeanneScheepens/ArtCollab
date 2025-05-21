@@ -13,6 +13,8 @@ namespace Logic.Interfaces
         User GetUserByName(string name);
         void CreateUser(User user);    
         void DeleteUser(int id);
+        void UpdateUser(User user);
+
 
     }
 }

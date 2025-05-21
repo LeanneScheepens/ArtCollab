@@ -30,12 +30,30 @@ namespace Logic.Managers
                     _userRepository.DeleteUser(id);
                 }
             }
-
-            public void CreateUser(User user)
+        private bool IsBase64Valid(string base64)
+        {
+            try
             {
-            user.Password = PasswordHelper.HashPassword(user.Password);
-            _userRepository.CreateUser(user);
+                var data = Convert.FromBase64String(base64);
+                return data.Length >= 48; // salt + hash
             }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        public void CreateUser(User user)
+            {
+            if (!IsBase64Valid(user.Password))
+            {
+                // Hash het wachtwoord als het geen geldige hash is
+                user.Password = PasswordHelper.HashPassword(user.Password);
+            }
+
+            _userRepository.CreateUser(user);
+        }
 
         public User GetUserByName(string name)
         {
@@ -66,8 +84,13 @@ namespace Logic.Managers
             var user = _userRepository.GetUserByName(name);
             return user != null && PasswordHelper.VerifyPassword(password, user.Password);
         }
+        public void UpdateUser(User user)
+        {
+            _userRepository.UpdateUser(user);
+        }
+
     }
-    }
+}
 
 
 

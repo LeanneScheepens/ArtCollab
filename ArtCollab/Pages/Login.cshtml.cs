@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Logic.Managers;
 using Logic.Models;
 using Logic.ViewModels;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ArtCollab.Pages
 {
@@ -28,8 +31,10 @@ namespace ArtCollab.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+
             if (!ModelState.IsValid)
                 return Page();
+
 
             var user = await _userManager.AuthenticateUser(Name, Password);
             if (user == null)
@@ -38,10 +43,21 @@ namespace ArtCollab.Pages
                 return Page();
             }
 
-            if (user.Role == Role.Admin)
-                return RedirectToPage("/Privacy");
-            else
-                return RedirectToPage("/Home");
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, user.Name),
+        new Claim(ClaimTypes.Email, user.Email ?? ""),
+        new Claim(ClaimTypes.Role, user.Role.ToString()),
+        new Claim("ProfilePicture", user.ProfilePicture ?? "default.jpg")
+    };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            return RedirectToPage("/ArtworkOverview");
         }
+
     }
 }

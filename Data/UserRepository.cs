@@ -62,7 +62,8 @@ namespace Data
                 string sql = @"
             SELECT Id, Name, Email, Password, ProfilePicture, Biography, 'Artist' AS Role
             FROM [User]
-            WHERE Name = @Name";
+            WHERE LOWER(Name) = LOWER(@Name)"
+;
 
                 using var command = new SqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@Name", name);
@@ -158,6 +159,27 @@ namespace Data
                 }
             }
         }
+        public void UpdateUser(User user)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+
+            string sql = @"
+        UPDATE [User]
+        SET Email = @Email,
+            Biography = @Biography,
+            ProfilePicture = @ProfilePicture
+        WHERE Name = @Name";
+
+            using var command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@Email", user.Email ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@Biography", user.Biography ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@ProfilePicture", user.ProfilePicture ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@Name", user.Name);
+
+            command.ExecuteNonQuery();
+        }
+
 
     }
 }

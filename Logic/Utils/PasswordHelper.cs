@@ -11,33 +11,50 @@ namespace Logic.Utils
     {
         public static string HashPassword(string password)
         {
-            byte[] salt = RandomNumberGenerator.GetBytes(16);
-            var hash = new Rfc2898DeriveBytes(password, salt, 100_000, HashAlgorithmName.SHA256);
-            byte[] hashBytes = hash.GetBytes(32);
+            using var rng = RandomNumberGenerator.Create();
+            byte[] salt = new byte[16];
+            rng.GetBytes(salt);
 
-            byte[] hashWithSalt = new byte[48];
-            Array.Copy(salt, 0, hashWithSalt, 0, 16);
-            Array.Copy(hashBytes, 0, hashWithSalt, 16, 32);
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100_000);
+            byte[] hash = pbkdf2.GetBytes(32);
 
-            return Convert.ToBase64String(hashWithSalt);
+            byte[] hashBytes = new byte[48];
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 32);
+
+            return Convert.ToBase64String(hashBytes);
         }
+
 
         public static bool VerifyPassword(string password, string storedHash)
         {
-            byte[] hashWithSalt = Convert.FromBase64String(storedHash);
-            byte[] salt = new byte[16];
-            Array.Copy(hashWithSalt, 0, salt, 0, 16);
-
-            var hash = new Rfc2898DeriveBytes(password, salt, 100_000, HashAlgorithmName.SHA256);
-            byte[] hashBytes = hash.GetBytes(32);
-
-            for (int i = 0; i < 32; i++)
+            try
             {
-                if (hashWithSalt[i + 16] != hashBytes[i])
-                    return false;
-            }
+                byte[] hashBytes = Convert.FromBase64String(storedHash);
+                if (hashBytes.Length != 48) return false;
 
-            return true;
+                byte[] salt = new byte[16];
+                Array.Copy(hashBytes, 0, salt, 0, 16);
+
+                var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100_000);
+                byte[] computedHash = pbkdf2.GetBytes(32);
+
+                for (int i = 0; i < 32; i++)
+                {
+                    if (hashBytes[i + 16] != computedHash[i])
+                        return false;
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
+
+
+
+
     }
 }

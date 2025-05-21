@@ -5,6 +5,5 @@ namespace ArtCollab.Interface
     public interface IDatabaseService // kan weg
     {
         protected SqlConnection GetConnection();
-        public bool TestConnection();
     }
 }
