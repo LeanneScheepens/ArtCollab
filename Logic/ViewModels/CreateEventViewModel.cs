@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Logic.ViewModels
+{
+    public class CreateEventViewModel
+    {
+        [Required]
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        [Required]
+        public string Owner { get; set; } // Voor nu; later vervangen door ingelogde admin-gebruiker
+
+        public List<int> SelectedArtworkIds { get; set; } = new();
+
+        public List<(int Id, string Title)> AvailableArtworks { get; set; } = new();
+    }
+}

@@ -1,0 +1,38 @@
+﻿@page
+@model ArtCollab.Pages.CreateEventModel
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<h2>Create Event</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input asp-for="ViewModel.Title" class="form-control" />
+        <span asp-validation-for="ViewModel.Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea asp-for="ViewModel.Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Owner</label>
+        <input asp-for="ViewModel.Owner" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Select Artworks</label><br />
+        @foreach (var artwork in Model.ViewModel.AvailableArtworks)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="ViewModel.SelectedArtworkIds" value="@artwork.Id" />
+                <label class="form-check-label">@artwork.Title</label>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Event</button>
+</form>
