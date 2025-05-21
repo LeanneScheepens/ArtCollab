@@ -23,20 +23,6 @@ namespace ArtCollab.Data
         }
 
 
-        public bool TestConnection()
-        {
-            try
-            {
-                using var connection = GetConnection();
-                connection.Open();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                // Eventueel loggen of tonen voor debugging
-                Console.WriteLine("Connection failed: " + ex.Message);
-                return false;
-            }
+ 
         }
     }
-}
