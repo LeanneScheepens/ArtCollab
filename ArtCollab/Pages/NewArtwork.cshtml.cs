@@ -2,6 +2,7 @@ using ArtCollab.Models;
 using Logic.Managers;
 using Logic.Models;
 using Logic.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ArtCollab.Pages
 {
+
+    [Authorize]
     public class NewArtworkModel : PageModel
     {
         private readonly ArtworkManager _artworkManager;
@@ -45,12 +48,13 @@ namespace ArtCollab.Pages
                     ArtworkVM.ImageFile.CopyTo(fileStream);
                 }
             }
+            string owner = User.Identity?.Name ?? "Unknown";
 
             var newArtwork = new Artwork(
           id: 0, 
           title: ArtworkVM.Title,
           description: ArtworkVM.Description,
-          owner: ArtworkVM.Owner,
+          owner: owner,
           uploadDate: DateTime.Now,
           imageUrl: "/images/" + uniqueFileName
             );
