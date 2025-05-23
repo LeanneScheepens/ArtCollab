@@ -2,11 +2,13 @@ using ArtCollab.Models;
 using ArtCollab.Services;
 using Logic.Managers;
 using Logic.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ArtCollab.Pages
 {
+    [Authorize(Roles = "Admin")]
     public class CreateEventModel : PageModel
     {
         private readonly EventManager _eventManager;
@@ -39,10 +41,13 @@ namespace ArtCollab.Pages
                 return Page();
             }
 
-            var evt = new Event(0, ViewModel.Title, ViewModel.Description, ViewModel.Owner);
+            var owner = User.Identity?.Name ?? "Unknown";
+            var evt = new Event(0, ViewModel.Title, ViewModel.Description, owner);
+
             _eventManager.CreateEvent(evt, ViewModel.SelectedArtworkIds);
 
             return RedirectToPage("/Events/Index");
         }
+
     }
 }
