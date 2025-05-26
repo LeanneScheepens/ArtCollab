@@ -46,6 +46,9 @@ namespace Data
                         reader.IsDBNull(4) ? null : reader.GetString(4),  // ProfilePicture
                         reader.IsDBNull(5) ? null : reader.GetString(5)   // Biography
                     );
+
+                    // Rol instellen na ophalen van ID
+                    user.Role = IsUserAdmin(user.Id) ? Role.Admin : Role.Artist;
                     users.Add(user);
                 }
             }
@@ -60,10 +63,9 @@ namespace Data
                 connection.Open();
 
                 string sql = @"
-            SELECT Id, Name, Email, Password, ProfilePicture, Biography, 'Artist' AS Role
-            FROM [User]
-            WHERE LOWER(Name) = LOWER(@Name)"
-;
+                    SELECT Id, Name, Email, Password, ProfilePicture, Biography
+                    FROM [User]
+                    WHERE LOWER(Name) = LOWER(@Name)";
 
                 using var command = new SqlCommand(sql, connection);
                 command.Parameters.AddWithValue("@Name", name);
@@ -78,15 +80,37 @@ namespace Data
                         reader.GetString(3),
                         reader.IsDBNull(4) ? null : reader.GetString(4),
                         reader.IsDBNull(5) ? null : reader.GetString(5)
-    )
-                    {
-                        Role = Role.Artist
-                    };
-                    return user;
+                    );
 
+                    int userId = user.Id;
+
+                    reader.Close(); // belangrijk voor tweede query!
+
+                    // Rol bepalen via aparte tabel
+                    if (IsUserAdmin(userId))
+                        user.Role = Role.Admin;
+                    else
+                        user.Role = Role.Artist;
+
+                    return user;
                 }
+
                 return null;
             }
+        }
+
+        public bool IsUserAdmin(int userId)
+        {
+            using var connection = GetConnection();
+            connection.Open();
+
+            string sql = "SELECT COUNT(*) FROM Admin WHERE UserId = @UserId";
+
+            using var command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@UserId", userId);
+
+            int count = (int)command.ExecuteScalar();
+            return count > 0;
         }
 
 
