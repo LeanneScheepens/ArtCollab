@@ -44,14 +44,36 @@ builder.Services.AddScoped<IEventRepository>(provider =>
     return new EventRepository(connectionString);
 });
 
+//NewAdmin
+
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizePage("/NewAdmin", "AdminOnly");
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy =>
+        policy.RequireRole("Admin"));
+});
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/AccessDenied"; // Maak een Razor page /AccessDenied.cshtml aan
+    options.LoginPath = "/Login"; // Voor niet-ingelogde gebruikers
+});
+
 
 //Cookies
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
         options.LoginPath = "/Login";
         options.AccessDeniedPath = "/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromDays(14); // maxduur
+        options.SlidingExpiration = true; // verlengt cookie bij elke activiteit
     });
+
 
 
 var app = builder.Build();
