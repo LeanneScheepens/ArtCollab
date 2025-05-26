@@ -27,26 +27,30 @@ namespace ArtCollab.Pages
         {
             ViewModel = new CreateEventViewModel
             {
-                AvailableArtworks = _artworkManager.GetArtworks()
-                    .Select(a => (a.Id, a.Title)).ToList()
+                StartDate = DateTime.Today,
+                EndDate = DateTime.Today.AddDays(1),
+               
             };
+
         }
 
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid)
-            {
-                ViewModel.AvailableArtworks = _artworkManager.GetArtworks()
-                    .Select(a => (a.Id, a.Title)).ToList();
-                return Page();
-            }
-
             var owner = User.Identity?.Name ?? "Unknown";
-            var evt = new Event(0, ViewModel.Title, ViewModel.Description, owner);
 
-            _eventManager.CreateEvent(evt, ViewModel.SelectedArtworkIds);
+            var evt = new Event(
+                0,
+                ViewModel.Title,
+                ViewModel.StartDate,
+                ViewModel.EndDate,
+                ViewModel.Description,
+                owner
+            );
 
-            return RedirectToPage("/Events/Index");
+            _eventManager.CreateEvent(evt);
+
+
+            return RedirectToPage("/Events");
         }
 
     }

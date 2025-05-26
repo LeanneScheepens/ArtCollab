@@ -12,10 +12,9 @@ namespace ArtCollab.Services
             _eventRepository = eventRepository;
         }
 
-        public void CreateEvent(Event evt, List<int> artworkIds)
+        public void CreateEvent(Event evt)
         {
             _eventRepository.CreateEvent(evt);
-            _eventRepository.AddArtworksToEvent(evt.Id, artworkIds);
         }
 
         public List<Event> GetAllEvents() => _eventRepository.GetAllEvents();
