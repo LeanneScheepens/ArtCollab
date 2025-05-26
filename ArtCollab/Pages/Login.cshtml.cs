@@ -54,7 +54,16 @@ namespace ArtCollab.Pages
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            bool keepLoggedIn = Request.Form["KeepLoggedIn"] == "on";
+
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = keepLoggedIn,
+                ExpiresUtc = keepLoggedIn ? DateTime.UtcNow.AddDays(14) : (DateTime?)null
+            };
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProperties);
+
 
             return RedirectToPage("/ArtworkOverview");
         }
