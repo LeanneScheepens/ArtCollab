@@ -6,10 +6,12 @@ using Logic.Managers;
 using Logic.Models;
 using Logic.ViewModels;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace ArtCollab.Pages
 {
+    [Authorize(Roles = "Admin")]
     public class NewAdminModel : PageModel
     {
         private readonly UserManager _userManager;
