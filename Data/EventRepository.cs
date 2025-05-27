@@ -50,21 +50,26 @@ namespace Data
 
             while (reader.Read())
             {
-                events.Add(new Event(
+                var evt = new Event(
                     reader.GetInt32(0),      // Id
                     reader.GetString(1),     // Title
                     reader.GetDateTime(2),   // StartDate
                     reader.GetDateTime(3),   // EndDate
                     reader.GetString(4),     // Description
                     reader.GetString(5)      // Owner
-                ));
+                );
+
+                events.Add(evt);
             }
+
             foreach (var evt in events)
             {
                 evt.Artworks = GetArtworksByEventId(evt.Id);
             }
+
             return events;
         }
+
         private List<Artwork> GetArtworksByEventId(int eventId)
         {
             var artworks = new List<Artwork>();

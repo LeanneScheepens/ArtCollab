@@ -6,63 +6,74 @@
 
 <h2 class="mb-4">Events</h2>
 
+<!-- Event-kaarten met server-side selectie -->
 <div class="d-flex flex-wrap gap-3">
     @foreach (var evt in Model.Events)
     {
-        <div class="event-card px-4 py-2 mb-4" onclick="selectEvent(@evt.Id)" id="event-@evt.Id">
-            <div><strong>@evt.Title</strong></div>
+        <form method="get" class="event-card-form">
+            <input type="hidden" name="SelectedEventId" value="@evt.Id" />
+            <button type="submit" class="event-card @(Model.SelectedEventId == evt.Id ? "selected-event" : "")">
+                <strong>@evt.Title</strong>
+            </button>
+        </form>
+    }
+</div>
 
-            <div class="event-details mt-3" id="details-@evt.Id" style="display:none;">
-                <h5>Artworks in this event:</h5>
-                <ul>
-                    @foreach (var artwork in evt.Artworks)
+<!-- Details van geselecteerd event -->
+@if (Model.SelectedEvent != null)
+{
+    <div class="mt-4">
+        <h4>Artworks in event '@Model.SelectedEvent.Title':</h4>
+
+        <div class="container mt-4">
+            <div class="row">
+                @if (Model.SelectedEvent.Artworks != null && Model.SelectedEvent.Artworks.Any())
+                {
+                    @foreach (var artwork in Model.SelectedEvent.Artworks)
                     {
-                        <li>@artwork.Title</li>
+                        <div class="col-md-3 mb-4 d-flex flex-column align-items-center">
+                            <a asp-page="/ArtworkDetail" asp-route-id="@artwork.Id" class="text-decoration-none text-dark">
+                                <img src="@artwork.ImageUrl" class="artwork-thumbnail" alt="@artwork.Title" />
+                                <p class="mt-2 fw-bold text-center">@artwork.Title</p>
+                            </a>
+                        </div>
                     }
-                </ul>
-
-                <form method="post" asp-page-handler="AddArtwork">
-                    <input type="hidden" name="EventId" value="@evt.Id" />
-
-                    <div class="form-group mt-2">
-                        <label for="ArtworkId">Select Artwork</label>
-                        <select name="ArtworkId" class="form-control" required>
-                            <option value="">-- Select your artwork --</option>
-                            @foreach (var artwork in Model.Artworks)
-                            {
-                                <option value="@artwork.Id">@artwork.Title</option>
-                            }
-                        </select>
+                }
+                else
+                {
+                    <div class="col-12 text-center text-muted">
+                        <p>(No artworks yet)</p>
                     </div>
-
-                    <button type="submit" class="btn btn-sm btn-primary mt-2">Add Artwork</button>
-                </form>
+                }
             </div>
         </div>
 
-            <form method="post" asp-page-handler="AddArtwork">
-                <input type="hidden" name="EventId" value="@evt.Id" />
 
-                <div class="form-group mt-2">
-                    <label for="ArtworkId">Select Artwork</label>
-                    <select name="ArtworkId" class="form-control" required>
-                        <option value="">-- Select your artwork --</option>
-                        @foreach (var artwork in Model.Artworks)
-                        {
-                            <option value="@artwork.Id">@artwork.Title</option>
-                        }
-                    </select>
+        <form method="post" asp-page-handler="AddArtwork">
+            <input type="hidden" name="EventId" value="@Model.SelectedEvent.Id" />
 
-                </div>
+            <div class="form-group mt-2">
+                <label for="ArtworkId">Select Artwork</label>
+                <select name="ArtworkId" class="form-control" required>
+                    <option value="">-- Select your artwork --</option>
+                    @foreach (var artwork in Model.Artworks)
+                    {
+                        <option value="@artwork.Id">@artwork.Title</option>
+                    }
+                </select>
+            </div>
 
-                <button type="submit" class="btn btn-sm btn-primary mt-2">Add Artwork</button>
-            </form>
-     
+            <button type="submit" class="btn btn-primary mt-2">Add Artwork</button>
+        </form>
+    </div>
+}
+
+<!-- Styling -->
+<style>
+    .event-card-form {
+        margin: 0;
     }
 
-</div>
-
-<style>
     .event-card {
         background-color: #f8f9fa;
         border: 1px solid #dee2e6;
@@ -70,34 +81,28 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         font-size: 1.2rem;
         font-weight: 500;
+        width: 250px;
+        height: 100px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border: none;
     }
 
     .selected-event {
         border: 2px solid black !important;
     }
 
-    .event-card {
-        cursor: pointer;
-        transition: all 0.2s ease;
+    .artwork-thumbnail {
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
 </style>
-@section Scripts {
-    <script>
-        let selectedCardId = null;
-
-        function selectEvent(eventId) {
-            if (selectedCardId !== null) {
-                // Reset vorige selectie
-                document.getElementById("event-" + selectedCardId).classList.remove("selected-event");
-                document.getElementById("details-" + selectedCardId).style.display = "none";
-            }
-
-            // Toon nieuw geselecteerd event
-            document.getElementById("event-" + eventId).classList.add("selected-event");
-            document.getElementById("details-" + eventId).style.display = "block";
-
-            selectedCardId = eventId;
-        }
-    </script>
-}
