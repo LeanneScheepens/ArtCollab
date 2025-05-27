@@ -1,4 +1,6 @@
-﻿namespace ArtCollab.Models
+﻿using Logic.Interfaces;
+
+namespace ArtCollab.Models
 {
     public class Event
     {
@@ -26,5 +28,18 @@
             Description = description;
             Owner = owner;
         }
+        public List<Artwork> Artworks { get; set; } = new();
+
+
+        public void AddArtworkAndPersist(Artwork artwork, IEventRepository repository)
+        {
+            if (!Artworks.Any(a => a.Id == artwork.Id))
+            {
+                Artworks.Add(artwork);
+                repository.AddArtworksToEvent(this.Id, new List<int> { artwork.Id });
+            }
+        }
+
+
     }
 }

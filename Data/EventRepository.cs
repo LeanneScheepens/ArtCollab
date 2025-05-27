@@ -59,8 +59,41 @@ namespace Data
                     reader.GetString(5)      // Owner
                 ));
             }
-
+            foreach (var evt in events)
+            {
+                evt.Artworks = GetArtworksByEventId(evt.Id);
+            }
             return events;
+        }
+        private List<Artwork> GetArtworksByEventId(int eventId)
+        {
+            var artworks = new List<Artwork>();
+
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+
+            var cmd = new SqlCommand(@"
+        SELECT a.Id, a.Title, a.Description, a.Owner, a.UploadDate, a.ImageUrl
+        FROM Artwork a
+        INNER JOIN EventArtworks ea ON ea.ArtworkId = a.Id
+        WHERE ea.EventId = @EventId", connection);
+
+            cmd.Parameters.AddWithValue("@EventId", eventId);
+
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                artworks.Add(new Artwork(
+                    reader.GetInt32(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.GetString(3),
+                    reader.GetDateTime(4),
+                    reader.GetString(5)
+                ));
+            }
+
+            return artworks;
         }
 
         public Event GetEventById(int id)

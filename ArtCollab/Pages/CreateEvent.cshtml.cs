@@ -50,7 +50,7 @@ namespace ArtCollab.Pages
             _eventManager.CreateEvent(evt);
 
 
-            return RedirectToPage("/Events");
+            return RedirectToPage("/EventOverview");
         }
 
     }

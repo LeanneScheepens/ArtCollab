@@ -1,0 +1,103 @@
+﻿@page
+@model ArtCollab.Pages.EventOverviewModel
+@{
+    ViewData["Title"] = "Event Overview";
+}
+
+<h2 class="mb-4">Events</h2>
+
+<div class="d-flex flex-wrap gap-3">
+    @foreach (var evt in Model.Events)
+    {
+        <div class="event-card px-4 py-2 mb-4" onclick="selectEvent(@evt.Id)" id="event-@evt.Id">
+            <div><strong>@evt.Title</strong></div>
+
+            <div class="event-details mt-3" id="details-@evt.Id" style="display:none;">
+                <h5>Artworks in this event:</h5>
+                <ul>
+                    @foreach (var artwork in evt.Artworks)
+                    {
+                        <li>@artwork.Title</li>
+                    }
+                </ul>
+
+                <form method="post" asp-page-handler="AddArtwork">
+                    <input type="hidden" name="EventId" value="@evt.Id" />
+
+                    <div class="form-group mt-2">
+                        <label for="ArtworkId">Select Artwork</label>
+                        <select name="ArtworkId" class="form-control" required>
+                            <option value="">-- Select your artwork --</option>
+                            @foreach (var artwork in Model.Artworks)
+                            {
+                                <option value="@artwork.Id">@artwork.Title</option>
+                            }
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-sm btn-primary mt-2">Add Artwork</button>
+                </form>
+            </div>
+        </div>
+
+            <form method="post" asp-page-handler="AddArtwork">
+                <input type="hidden" name="EventId" value="@evt.Id" />
+
+                <div class="form-group mt-2">
+                    <label for="ArtworkId">Select Artwork</label>
+                    <select name="ArtworkId" class="form-control" required>
+                        <option value="">-- Select your artwork --</option>
+                        @foreach (var artwork in Model.Artworks)
+                        {
+                            <option value="@artwork.Id">@artwork.Title</option>
+                        }
+                    </select>
+
+                </div>
+
+                <button type="submit" class="btn btn-sm btn-primary mt-2">Add Artwork</button>
+            </form>
+     
+    }
+
+</div>
+
+<style>
+    .event-card {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+
+    .selected-event {
+        border: 2px solid black !important;
+    }
+
+    .event-card {
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+</style>
+@section Scripts {
+    <script>
+        let selectedCardId = null;
+
+        function selectEvent(eventId) {
+            if (selectedCardId !== null) {
+                // Reset vorige selectie
+                document.getElementById("event-" + selectedCardId).classList.remove("selected-event");
+                document.getElementById("details-" + selectedCardId).style.display = "none";
+            }
+
+            // Toon nieuw geselecteerd event
+            document.getElementById("event-" + eventId).classList.add("selected-event");
+            document.getElementById("details-" + eventId).style.display = "block";
+
+            selectedCardId = eventId;
+        }
+    </script>
+}
