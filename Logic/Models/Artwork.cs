@@ -3,8 +3,6 @@ namespace ArtCollab.Models
 {
     public class Artwork
     {
-
-        //private static int seed = 1;
         private int id;
         private string title;
         private string description;
@@ -18,8 +16,6 @@ namespace ArtCollab.Models
         public string Owner { get; set; }
         public DateTime UploadDate { get; set; }
         public string ImageUrl { get; set; }
-
-        //public List<int> UserIds { get; set; } = new();
 
         public Artwork (int id, string title, string description, string owner, DateTime uploadDate, string imageUrl)
         {

@@ -1,10 +1,10 @@
-﻿using ArtCollab.Interface;
+﻿
 using Microsoft.Data.SqlClient;
 
 
 namespace ArtCollab.Data
 {
-    public class DatabaseService : IDatabaseService
+    public class DatabaseService 
     {
         private readonly string _ConnectionString;
 

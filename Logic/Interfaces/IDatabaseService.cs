@@ -1,9 +1,9 @@
-﻿using Microsoft.Data.SqlClient;
+﻿//using Microsoft.Data.SqlClient;
 
-namespace ArtCollab.Interface
-{
-    public interface IDatabaseService // kan weg
-    {
-        protected SqlConnection GetConnection();
-    }
-}
+//namespace ArtCollab.Interface
+//{
+//    public interface IDatabaseService // kan weg
+//    {
+//        protected SqlConnection GetConnection();
+//    }
+//}

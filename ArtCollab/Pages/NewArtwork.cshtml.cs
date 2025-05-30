@@ -58,10 +58,6 @@ namespace ArtCollab.Pages
           uploadDate: DateTime.Now,
           imageUrl: "/images/" + uniqueFileName
             );
-
-            //// UserIds nog apart instellen:
-            //newArtwork.UserIds = ArtworkVM.UserIds.Split(',').Select(id => int.Parse(id.Trim())).ToList();
-
             _artworkManager.CreateArtwork(newArtwork);
 
             return RedirectToPage("/ArtworkOverview"); 
