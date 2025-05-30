@@ -79,17 +79,6 @@ namespace Data
                         ArtworkId = (int)artworkCmd.ExecuteScalar();
                     }
 
-                    //foreach (var userId in artwork.UserIds)
-                    //{
-                    //    string insertJoinSql = @"INSERT INTO Artwork_User (artworkId, userId)
-                    //                     VALUES (@artworkId, @userId)";
-
-                    //    using var joinCmd = new SqlCommand(insertJoinSql, connection, transaction);
-                    //    joinCmd.Parameters.AddWithValue("@artworkId", ArtworkId);
-                    //    joinCmd.Parameters.AddWithValue("@userId", userId);
-                    //    joinCmd.ExecuteNonQuery();
-                    //}
-
                     transaction.Commit();
                 }
                 catch
