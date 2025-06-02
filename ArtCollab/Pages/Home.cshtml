@@ -22,6 +22,11 @@
             .filter-btn:hover {
                 background-color: #f0f0f0;
             }
+
+        .card-img-top {
+            max-height: 200px;
+            object-fit: cover;
+        }
     </style>
 }
 
@@ -33,7 +38,6 @@
         <button class="filter-btn">2023</button>
         <button class="filter-btn">2022</button>
         <button class="filter-btn">2021</button>
-        <!-- Voeg meer jaren toe -->
     </div>
 
     <!-- Artwork Grid -->
@@ -42,18 +46,22 @@
             @foreach (var artwork in Model.Artworks)
             {
                 <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <img src="@artwork.ImageUrl" class="card-img-top" alt="@artwork.Title" />
-                        <div class="card-body">
-                            <h6 class="card-title text-truncate">@artwork.Title</h6>
+                    <a asp-page="/ArtworkViewDetail"
+                       asp-route-id="@artwork.Id"
+                       class="text-decoration-none text-dark">
+                        <div class="card h-100 shadow-sm">
+                            <img src="@artwork.ImageUrl" class="card-img-top" alt="@artwork.Title" />
+                            <div class="card-body">
+                                <h6 class="card-title text-truncate">@artwork.Title</h6>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             }
         </div>
 
         <div class="text-center mt-4">
-            <a href="#" class="btn btn-outline-dark">Next ></a>
+            <a href="#" class="btn btn-outline-dark">Next &gt;</a>
         </div>
     </div>
 </div>

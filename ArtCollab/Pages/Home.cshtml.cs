@@ -1,6 +1,5 @@
 using ArtCollab.Models;
 using Logic.Managers;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ArtCollab.Pages
@@ -14,7 +13,7 @@ namespace ArtCollab.Pages
             _artworkManager = artworkManager;
         }
 
-        public List<Artwork> Artworks { get; set; }
+        public List<Artwork> Artworks { get; set; } = new();
 
         public void OnGet()
         {
