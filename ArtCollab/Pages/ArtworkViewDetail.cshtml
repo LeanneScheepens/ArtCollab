@@ -1,13 +1,11 @@
-﻿@page "{id:int}"
-@model ArtCollab.Pages.ArtworkDetailModel
+﻿@page
+@model ArtCollab.Pages.ArtworkEventDetailModel
 @{
-    ViewData["Title"] = "Artwork Detail";
+    ViewData["Title"] = "Artwork Event Detail";
 }
 
 <div class="d-flex gap-2 mb-3">
-    <a asp-page="/DeleteArtwork" asp-route-id="@Model.Artwork.Id" class="btn btn-dark">Delete</a>
     <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
-
 </div>
 
 
@@ -18,3 +16,4 @@
 <p><strong>Owner:</strong> @Model.Artwork.Owner</p>
 <p><strong>Description:</strong> @Model.Artwork.Description</p>
 <p><strong>Uploaded:</strong> @Model.Artwork.UploadDate.ToString("dd-MM-yyyy")</p>
+
