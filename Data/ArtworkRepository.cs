@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using ArtCollab.Data;
 using ArtCollab.Models;
 using Logic.Interfaces;
@@ -93,20 +94,41 @@ namespace Data
             using (var connection = GetConnection())
             {
                 connection.Open();
+                SqlTransaction transaction = connection.BeginTransaction();
 
-                // Eerst relaties verwijderen
-                var deleteRelationsCommand = connection.CreateCommand();
-                deleteRelationsCommand.CommandText = "DELETE FROM Artwork_User WHERE artworkId = @Id";
-                deleteRelationsCommand.Parameters.AddWithValue("@Id", id);
-                deleteRelationsCommand.ExecuteNonQuery();
+                try
+                {
+                    // Verwijder gekoppelde EventArtworks records
+                    var deleteEventArtworksCommand = connection.CreateCommand();
+                    deleteEventArtworksCommand.Transaction = transaction;
+                    deleteEventArtworksCommand.CommandText = "DELETE FROM EventArtworks WHERE artworkId = @Id";
+                    deleteEventArtworksCommand.Parameters.AddWithValue("@Id", id);
+                    deleteEventArtworksCommand.ExecuteNonQuery();
 
-                // Daarna artwork zelf verwijderen
-                var deleteArtworkCommand = connection.CreateCommand();
-                deleteArtworkCommand.CommandText = "DELETE FROM Artwork WHERE id = @Id";
-                deleteArtworkCommand.Parameters.AddWithValue("@Id", id);
-                deleteArtworkCommand.ExecuteNonQuery();
+                    // Verwijder gekoppelde Artwork_User records
+                    var deleteArtworkUserCommand = connection.CreateCommand();
+                    deleteArtworkUserCommand.Transaction = transaction;
+                    deleteArtworkUserCommand.CommandText = "DELETE FROM Artwork_User WHERE artworkId = @Id";
+                    deleteArtworkUserCommand.Parameters.AddWithValue("@Id", id);
+                    deleteArtworkUserCommand.ExecuteNonQuery();
+
+                    // Verwijder het Artwork zelf
+                    var deleteArtworkCommand = connection.CreateCommand();
+                    deleteArtworkCommand.Transaction = transaction;
+                    deleteArtworkCommand.CommandText = "DELETE FROM Artwork WHERE id = @Id";
+                    deleteArtworkCommand.Parameters.AddWithValue("@Id", id);
+                    deleteArtworkCommand.ExecuteNonQuery();
+
+                    transaction.Commit();
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
+
 
         public Artwork GetArtworkById(int id)
         {
