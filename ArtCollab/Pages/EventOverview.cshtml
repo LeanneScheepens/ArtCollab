@@ -29,7 +29,7 @@
                     @foreach (var artwork in Model.SelectedEvent.Artworks)
                     {
                         <div class="col-md-3 mb-4 d-flex flex-column align-items-center">
-                            <a asp-page="/ArtworkDetail" asp-route-id="@artwork.Id" class="text-decoration-none text-dark">
+                            <a asp-page="/ArtworkViewDetail" asp-route-id="@artwork.Id" class="text-decoration-none text-dark">
                                 <img src="@artwork.ImageUrl" class="artwork-thumbnail" alt="@artwork.Title" />
                                 <p class="mt-2 fw-bold text-center">@artwork.Title</p>
                             </a>
