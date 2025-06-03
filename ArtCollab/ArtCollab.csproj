@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Logic\Logic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Comment\" />
+  </ItemGroup>
+
 </Project>
