@@ -27,9 +27,15 @@ namespace Logic.Managers
                 _artworkRepository.DeleteArtwork(id);
             }
         }
+
         public Artwork GetArtworkById(int id)
         {
             return _artworkRepository.GetArtworkById(id);
         }
+        public List<Artwork> GetArtworksByOwner(string owner)
+        {
+            return GetArtworks().Where(a => a.Owner == owner).ToList();
+        }
+
     }
 }
