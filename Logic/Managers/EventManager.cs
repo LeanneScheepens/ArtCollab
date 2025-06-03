@@ -1,4 +1,4 @@
-﻿using ArtCollab.Models;
+﻿using Logic.Models;
 using Logic.Interfaces;
 
 namespace ArtCollab.Services

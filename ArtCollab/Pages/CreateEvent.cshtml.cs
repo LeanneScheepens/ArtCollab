@@ -1,4 +1,4 @@
-using ArtCollab.Models;
+using Logic.Models;
 using ArtCollab.Services;
 using Logic.Managers;
 using Logic.ViewModels;

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ArtCollab.Models;
 using Microsoft.Data.SqlClient;
 using Logic.Interfaces;
 using System.Data.SqlClient;
+using Logic.Models;
 
 namespace Data
 {

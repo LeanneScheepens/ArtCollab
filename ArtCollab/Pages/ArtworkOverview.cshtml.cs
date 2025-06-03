@@ -1,5 +1,5 @@
 
-using ArtCollab.Models;
+using Logic.Models;
 using Logic.Managers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

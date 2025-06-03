@@ -1,5 +1,5 @@
 ﻿
-namespace ArtCollab.Models
+namespace Logic.Models
 {
     public class Artwork
     {

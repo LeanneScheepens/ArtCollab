@@ -1,6 +1,7 @@
 ﻿using Logic.Interfaces;
+using Logic.Models;
 
-namespace ArtCollab.Models
+namespace Logic.Models
 {
     public class Event
     {
