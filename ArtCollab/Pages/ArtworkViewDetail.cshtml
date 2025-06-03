@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{id:int}"
 @model ArtCollab.Pages.ArtworkEventDetailModel
 @{
     ViewData["Title"] = "Artwork Event Detail";
@@ -6,6 +6,16 @@
 
 <div class="d-flex gap-2 mb-3">
     <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
+    <form method="post" class="d-flex gap-2">
+        <select asp-for="SelectedCollectionId" class="form-select w-auto">
+            <option value="">-- Add to Collection --</option>
+            @foreach (var collection in Model.UserCollections)
+            {
+                <option value="@collection.Id">@collection.Title</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
 </div>
 
 
