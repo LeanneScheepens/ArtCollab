@@ -1,23 +1,33 @@
-﻿namespace ArtCollab.Models
+﻿using Logic.Interfaces;
+using Logic.Models;
+using Logic.Managers;
+
+
+
+namespace Logic.Models
 {
     public class Collection
     {
-
-        private static int seed = 1;
         private int id;
-        private string name;
+        private string title;
         private string uploadDate;
+        private string owner;
 
-        public int Id { get; }
-        public string Name { get; set; }
-        public string UploadDate { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Owner { get; set; }
+        public DateTime UploadDate { get; set; }
+        public List<Artwork> Artworks { get; set; } = new();
 
-        public Collection (int id, string name, string uploadDate)
+        public Collection() { }
+
+        public Collection (int id, string title, DateTime uploadDate, string owner)
         {
             Id = id;
-            this.name = name;
-            this.uploadDate = uploadDate;
+            Title = title;
+            UploadDate = uploadDate;
+            Owner = owner;
         }
- 
+     
     }
 }
