@@ -1,0 +1,37 @@
+﻿@page
+@model ArtCollab.Pages.Collection.CollectionOverviewModel
+@{
+    ViewData["Title"] = "My Collections";
+}
+
+<h2>My Collections</h2>
+
+<a asp-page="/Collection/CreateCollection" class="btn btn-primary mb-3">Add Collection</a>
+
+@if (!Model.Collections.Any())
+{
+    <p>You haven't created any collections yet.</p>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var collection in Model.Collections)
+        {
+            <div class="col">
+                <div class="card shadow-sm position-relative">
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@collection.Id" class="position-absolute top-0 end-0 m-2">
+                        <button type="submit" class="btn btn-sm btn" title="Delete Collection" onclick="return confirm('Are you sure you want to delete this collection?');">
+                            🗑
+                        </button>
+                    </form>
+                    <div class="card-body">
+                        <h5 class="card-title">@collection.Title</h5>
+                        <p class="card-text"><strong>Upload Date:</strong> @collection.UploadDate.ToString("dd-MM-yyyy")</p>
+                        <a asp-page="/Collection/ViewCollection" asp-route-id="@collection.Id" class="btn btn-outline-dark">View</a>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+}
