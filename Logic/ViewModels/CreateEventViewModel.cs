@@ -22,7 +22,7 @@ namespace Logic.ViewModels
         public string Description { get; set; }
 
         [Required]
-        public string Owner { get; set; } // Voor nu; later vervangen door ingelogde admin-gebruiker
+        public string Owner { get; set; } 
 
     }
 }
