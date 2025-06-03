@@ -21,6 +21,7 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 builder.Services.AddScoped<UserManager>();
 builder.Services.AddScoped<ArtworkManager>();
 builder.Services.AddScoped<EventManager>();
+builder.Services.AddScoped<CollectionManager>();
 
 //Repositories
 builder.Services.AddScoped<IUserRepository>(provider =>
@@ -43,6 +44,13 @@ builder.Services.AddScoped<IEventRepository>(provider =>
     var connectionString = config.GetConnectionString("DefaultConnection");
     return new EventRepository(connectionString);
 });
+builder.Services.AddScoped<ICollectionRepository>(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var connectionString = config.GetConnectionString("DefaultConnection");
+    return new CollectionRepository(connectionString);
+});
+
 
 //NewAdmin
 
