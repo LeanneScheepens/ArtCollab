@@ -1,0 +1,35 @@
+﻿@page
+@model ArtCollab.Pages.Collection.CreateCollectionModel
+@{
+ ViewData["Title"] = "Create Collection";
+}
+
+<h2>Create New Collection</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="CollectionVM.Title" class="form-label">Title</label>
+        <input asp-for="CollectionVM.Title" class="form-control" />
+        <span asp-validation-for="CollectionVM.Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Add your artworks to this collection:</label>
+        @foreach (var artwork in Model.UserArtworks)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="CollectionVM.SelectedArtworkIds" value="@artwork.Id" id="artwork_@artwork.Id" />
+                <label class="form-check-label" for="artwork_@artwork.Id">
+                    @artwork.Title
+                </label>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Collection</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
