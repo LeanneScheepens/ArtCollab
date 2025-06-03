@@ -1,0 +1,34 @@
+﻿@page "{id:int}"
+@model ArtCollab.Pages.Collection.ViewCollectionModel
+@{
+    ViewData["Title"] = Model.Collection.Title;
+}
+
+<a href="javascript:history.back()" class="btn btn-secondary mb-3">&larr; Back</a>
+<a asp-page="/Collection/DeleteCollection" asp-route-id="@Model.Collection.Id" class="btn btn-danger mb-3">Delete</a>
+
+<h2>@Model.Collection.Title</h2>
+<p><strong>Upload Date:</strong> @Model.Collection.UploadDate.ToString("dd-MM-yyyy")</p>
+
+@if (Model.Collection.Artworks == null || !Model.Collection.Artworks.Any())
+{
+    <p>This collection has no artworks yet.</p>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var artwork in Model.Collection.Artworks)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="@artwork.ImageUrl" class="card-img-top" alt="@artwork.Title" />
+                    <div class="card-body">
+                        <h5 class="card-title">@artwork.Title</h5>
+                        <p class="card-text">@artwork.Description</p>
+                        <p class="card-text"><small>@artwork.UploadDate.ToString("dd-MM-yyyy")</small></p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
