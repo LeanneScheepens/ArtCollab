@@ -16,6 +16,9 @@ namespace ArtCollab.Pages
             _collectionManager = collectionManager;
         }
 
+        [TempData]
+        public string? SuccessMessage { get; set; }
+
         public Artwork Artwork { get; set; }
 
         [BindProperty]
@@ -39,12 +42,26 @@ namespace ArtCollab.Pages
             Artwork = _artworkManager.GetArtworkById(id);
             if (Artwork == null) return RedirectToPage("/ArtworkOverview");
 
-            if (SelectedCollectionId > 0)
+            if (SelectedCollectionId <= 0)
+                return RedirectToPage(new { id });
+
+            var collection = _collectionManager.GetCollectionById(SelectedCollectionId);
+            if (collection == null)
+                return RedirectToPage(new { id });
+
+            bool alreadyExists = _collectionManager.ArtworkExistsInCollection(SelectedCollectionId, id);
+            if (alreadyExists)
+            {
+                SuccessMessage = $"Artwork already exists in '{collection.Title}'.";
+            }
+            else
             {
                 _collectionManager.AddArtworkToCollection(SelectedCollectionId, id);
+                SuccessMessage = $"Artwork was successfully added to '{collection.Title}'.";
             }
 
-            return RedirectToPage(new { id }); // refresh met zelfde artwork id
+            return RedirectToPage(new { id });
         }
+
     }
 }
