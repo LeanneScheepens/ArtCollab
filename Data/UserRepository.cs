@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ArtCollab.Data;
-using ArtCollab.Models;
+using Logic.Models;
 using Logic.Models;
 using Logic.Interfaces;
 using Microsoft.Data.SqlClient;

@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using ArtCollab.Data;
-using ArtCollab.Models;
-using Logic.Interfaces;
 using Logic.Models;
+using Logic.Interfaces;
 using Microsoft.Data.SqlClient;
 
 namespace Data
