@@ -24,6 +24,11 @@ namespace Logic.Managers
         {
             _repo.DeleteCollection(collectionId, owner);
         }
+        public bool ArtworkExistsInCollection(int collectionId, int artworkId)
+        {
+            var collection = GetCollectionById(collectionId);
+            return collection?.Artworks?.Any(a => a.Id == artworkId) == true;
+        }
 
 
         public Collection GetCollectionById(int id) => _repo.GetCollectionById(id);
