@@ -22,6 +22,7 @@ builder.Services.AddScoped<UserManager>();
 builder.Services.AddScoped<ArtworkManager>();
 builder.Services.AddScoped<EventManager>();
 builder.Services.AddScoped<CollectionManager>();
+builder.Services.AddScoped<CommentManager>();
 
 //Repositories
 builder.Services.AddScoped<IUserRepository>(provider =>
@@ -50,7 +51,12 @@ builder.Services.AddScoped<ICollectionRepository>(provider =>
     var connectionString = config.GetConnectionString("DefaultConnection");
     return new CollectionRepository(connectionString);
 });
-
+builder.Services.AddScoped<ICommentRepository>(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var connectionString = config.GetConnectionString("DefaultConnection");
+    return new CommentRepository(connectionString);
+});
 
 //NewAdmin
 
