@@ -57,6 +57,7 @@ namespace Data
                     [artworkId] = @ArtworkId
                 WHERE [id] = @Id", conn);
 
+            cmd.Parameters.AddWithValue("Id", comment.Id);
             cmd.Parameters.AddWithValue("@Content", comment.Content);
             cmd.Parameters.AddWithValue("@UploadDate", comment.UploadDate);
             cmd.Parameters.AddWithValue("@Author", comment.Author);
