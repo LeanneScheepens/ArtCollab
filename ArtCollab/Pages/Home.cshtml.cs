@@ -14,21 +14,23 @@ namespace ArtCollab.Pages
         {
             _artworkManager = artworkManager;
         }
+        [BindProperty(SupportsGet = true)]
+        public int Page { get; set; } = 1;
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
 
         private const int PageSize = 12;
         public List<Artwork> Artworks { get; set; } = new();
 
-        public void OnGet(int page = 1)
+        public void OnGet()
         {
-
+            
             var allArtworks = _artworkManager.GetArtworks();
-            CurrentPage = page;
+            CurrentPage = Page;
             TotalPages = (int)Math.Ceiling(allArtworks.Count / (double)PageSize);
 
             Artworks = allArtworks
-                .Skip((page - 1) * PageSize)
+                .Skip((Page - 1) * PageSize)
                 .Take(PageSize)
                 .ToList();
         }
