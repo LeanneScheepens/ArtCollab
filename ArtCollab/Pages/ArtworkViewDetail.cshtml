@@ -3,9 +3,9 @@
 @{
     ViewData["Title"] = "Artwork Event Detail";
 }
-
 <div class="d-flex gap-2 mb-3">
     <a href="javascript:history.back()" class="btn btn-secondary">Back</a>
+
     <form method="post" class="d-flex gap-2">
         <select asp-for="SelectedCollectionId" class="form-select w-auto">
             <option value="">-- Add to Collection --</option>
@@ -18,7 +18,6 @@
     </form>
 </div>
 
-
 <h2>@Model.Artwork.Title</h2>
 
 <img src="@Model.Artwork.ImageUrl" alt="@Model.Artwork.Title" class="img-fluid rounded mb-3" style="max-height: 400px;" />
@@ -27,3 +26,65 @@
 <p><strong>Description:</strong> @Model.Artwork.Description</p>
 <p><strong>Uploaded:</strong> @Model.Artwork.UploadDate.ToString("dd-MM-yyyy")</p>
 
+@if (!string.IsNullOrWhiteSpace(TempData["SuccessMessage"] as string))
+{
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div class="toast align-items-center text-white bg-success border-0 show" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        @TempData["SuccessMessage"]
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- 💬 Comment Icon Toggle -->
+<button class="btn btn-outline-secondary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#commentsSection">
+    💬 View Comments (@Model.Comments.Count)
+</button>
+
+<!-- 📃 Comments Section -->
+<div class="collapse" id="commentsSection">
+    <div class="card card-body border">
+        @if (!Model.Comments.Any())
+        {
+            <p class="text-muted">No comments yet.</p>
+        }
+        else
+        {
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="border-bottom mb-2 pb-2">
+                    <p class="mb-1">@comment.Content</p>
+                    <small class="text-muted">— @comment.Author on @comment.UploadDate.ToString("dd-MM-yyyy HH:mm")</small>
+                </div>
+            }
+        }
+
+        <!-- 📝 Comment Submission -->
+        <form method="post" asp-page-handler="AddComment">
+            <div class="input-group mt-3">
+                <input asp-for="NewCommentContent" class="form-control" placeholder="Write a comment..." />
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+            toastElList.forEach(function (toastEl) {
+                var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+                toast.show();
+            });
+        });
+    </script>
+}
