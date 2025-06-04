@@ -46,25 +46,28 @@ body {
 }
 
 .event-card {
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
+    background-color: yellow;
     border-radius: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 1.2rem;
-    font-weight: 500;
-    width: 250px;
-    height: 100px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-size: 1.5rem;
+    font-weight: 600;
+    width: 320px;
+    height: 140px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    border: none;
+    border: 2px solid transparent;
 }
 
+    .event-card:hover {
+        transform: scale(1.03);
+    }
+
 .selected-event {
-    border: 2px solid black !important;
+    border: 3px solid black !important;
 }
 
 /* Overwrite artwork-thumbnail if needed */

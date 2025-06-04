@@ -1,6 +1,7 @@
 ﻿@page
 @model ArtCollab.Pages.EventOverviewModel
 @{
+    Layout = "_ArtistLayout";
     ViewData["Title"] = "Event Overview";
 }
 
@@ -11,7 +12,7 @@
     {
         <form method="get" class="event-card-form">
             <input type="hidden" name="SelectedEventId" value="@evt.Id" />
-            <button type="submit" class="event-card @(Model.SelectedEventId == evt.Id ? "selected-event" : "")">
+            <button type="submit" class="event-card" @(Model.SelectedEventId == evt.Id ? "selected-event" : "")>
                 <strong>@evt.Title</strong>
             </button>
         </form>
