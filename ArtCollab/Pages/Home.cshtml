@@ -1,33 +1,7 @@
-﻿@page
+﻿@page "/Home"
 @model ArtCollab.Pages.HomeModel
 @{
     ViewData["Title"] = "Home";
-}
-
-@section Styles {
-    <style>
-        .filter-btn {
-            font-size: 1.2rem;
-            padding: 12px 24px;
-            min-width: 120px;
-            margin: 6px;
-            border-radius: 0.25rem;
-        }
-
-            .filter-btn.active {
-                background-color: black;
-                color: white;
-            }
-
-            .filter-btn:hover {
-                background-color: #f0f0f0;
-            }
-
-        .card-img-top {
-            max-height: 200px;
-            object-fit: cover;
-        }
-    </style>
 }
 
 <div class="container-fluid landing-page">
@@ -61,7 +35,32 @@
         </div>
 
         <div class="text-center mt-4">
-            <a href="#" class="btn btn-outline-dark">Next &gt;</a>
+            <nav>
+                <ul class="pagination justify-content-center">
+                    @if (Model.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-page="/Home" asp-route-page="@(Model.CurrentPage - 1)">Previous</a>
+                        </li>
+                    }
+
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                            <a class="page-link" asp-page="/Home" asp-route-page="@i">@i</a>
+                        </li>
+                    }
+
+                    @if (Model.CurrentPage < Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-page="/Home" asp-route-page="@(Model.CurrentPage + 1)">Next</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
         </div>
+
+
     </div>
 </div>
