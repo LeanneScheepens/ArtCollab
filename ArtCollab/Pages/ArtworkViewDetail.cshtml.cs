@@ -30,7 +30,11 @@ namespace ArtCollab.Pages
 
         [BindProperty]
         public int SelectedCollectionId { get; set; }
+        [BindProperty]
+        public int CommentId { get; set; }
 
+        [BindProperty]
+        public string NewContent { get; set; }
         [BindProperty]
         public string NewCommentContent { get; set; }
 
@@ -87,5 +91,36 @@ namespace ArtCollab.Pages
 
             return RedirectToPage(new { id });
         }
+        public IActionResult OnPostDeleteComment(int id, int commentId)
+        {
+            var user = User.Identity?.Name;
+            var comment = _commentManager.GetCommentsByArtworkId(id).FirstOrDefault(c => c.Id == commentId);
+
+            if (comment == null || comment.Author != user)
+                return Forbid(); // 403 - niet toegestaan
+
+            _commentManager.DeleteComment(commentId);
+            return RedirectToPage(new { id });
+        }
+
+        public IActionResult OnPostEditComment(int id, int commentId, string newContent)
+        {
+            var user = User.Identity?.Name;
+            if (string.IsNullOrWhiteSpace(newContent))
+                return RedirectToPage(new { id });
+
+            var comment = _commentManager.GetCommentsByArtworkId(id).FirstOrDefault(c => c.Id == commentId);
+
+            if (comment == null || comment.Author != user)
+                return Forbid(); // 403 - niet toegestaan
+
+            comment.Content = newContent;
+            comment.UploadDate = DateTime.Now;
+
+            _commentManager.UpdateComment(comment);
+
+            return RedirectToPage(new { id });
+        }
+
     }
 }

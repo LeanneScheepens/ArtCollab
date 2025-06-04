@@ -59,10 +59,32 @@
             {
                 <div class="border-bottom mb-2 pb-2">
                     <p class="mb-1">@comment.Content</p>
-                    <small class="text-muted">— @comment.Author on @comment.UploadDate.ToString("dd-MM-yyyy HH:mm")</small>
+                    <small class="text-muted">— @comment.Author on @comment.UploadDate.ToString("dd-MM-yyyy")</small>
+
+                    @if (comment.Author == User.Identity?.Name)
+                    {
+                        <div class="mt-1">
+                            <form method="post" asp-page-handler="DeleteComment" class="d-inline">
+                                <input type="hidden" name="commentId" value="@comment.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                    🗑
+                                </button>
+                            </form>
+                            <form method="post" asp-page-handler="EditComment" class="d-inline ms-2">
+                                <input type="hidden" name="commentId" value="@comment.Id" />
+                                <input type="text" name="newContent" class="form-control d-inline w-auto" value="@comment.Content" />
+                                <button type="submit" class="btn btn-sm btn-outline-primary" title="Update">
+                                    ✏️
+                                </button>
+                            </form>
+                        </div>
+                    }
                 </div>
             }
-        }
+
+            }
+
+        
 
         <!-- 📝 Comment Submission -->
         <form method="post" asp-page-handler="AddComment">
