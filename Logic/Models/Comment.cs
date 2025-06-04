@@ -1,29 +1,29 @@
 ﻿using System.Globalization;
 
-namespace ArtCollab.Models
+namespace Logic.Models
 {
     public class Comment
     {
-        private static int seed = 1;
         private int id;
         private string content;
         private string author;
-        private int timeStamp;
+        private DateTime uploadDate;
 
 
-        public int Id { get; }
+        public int Id { get; set; }
         public string Content { get; set; }
         public string Author { get; set; }
-        public int TimeStamp { get; set; }
-        
+        public DateTime UploadDate{ get; set; }
+        public int ArtworkId { get; set; }
 
-        public Comment (int id, string content, string author, int timeStamp)
+
+        public Comment(int id, int artworkId, string content, string author, DateTime uploadDate)
         {
-            this.id = seed;
-            seed++;
-            this.content = content; 
-            this.author = author;
-            this.timeStamp = timeStamp;
-        }    
+            Id = id;
+            ArtworkId = artworkId;
+            Content = content;
+            Author = author;
+            UploadDate = uploadDate;
+        }
     }
 }
