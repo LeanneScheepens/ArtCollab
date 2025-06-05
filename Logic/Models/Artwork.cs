@@ -16,6 +16,7 @@ namespace Logic.Models
         public string Owner { get; set; }
         public DateTime UploadDate { get; set; }
         public string ImageUrl { get; set; }
+        public List<int> CollectionIds { get; set; } = new();
 
         public Artwork (int id, string title, string description, string owner, DateTime uploadDate, string imageUrl)
         {
