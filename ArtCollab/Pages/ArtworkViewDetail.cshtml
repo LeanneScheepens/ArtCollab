@@ -25,29 +25,31 @@
 <p><strong>Owner:</strong> @Model.Artwork.Owner</p>
 <p><strong>Description:</strong> @Model.Artwork.Description</p>
 <p><strong>Uploaded:</strong> @Model.Artwork.UploadDate.ToString("dd-MM-yyyy")</p>
-
 @if (!string.IsNullOrWhiteSpace(TempData["SuccessMessage"] as string))
 {
-    <div aria-live="polite" aria-atomic="true" class="position-relative">
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div class="toast align-items-center text-white bg-success border-0 show" role="alert">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        @TempData["SuccessMessage"]
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    <div aria-live="polite" aria-atomic="true" class="toast-container toast-container-top">
+        <div class="toast toast-large align-items-center text-white bg-success border-0 show" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    @TempData["SuccessMessage"]
                 </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     </div>
 }
+
 <!-- 💬 Comment Icon Toggle -->
 <button class="btn btn-outline-secondary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#commentsSection">
     💬 View Comments (@Model.Comments.Count)
 </button>
 
+@{
+    var keepCommentsOpen = Model.EditCommentId.HasValue || Request.Method == "POST" || Model.Comments.Any();
+}
+
 <!-- 📃 Comments Section -->
-<div class="collapse" id="commentsSection">
+<div class="collapse @(keepCommentsOpen ? "show" : "")" id="commentsSection">
     <div class="card card-body border">
         @if (!Model.Comments.Any())
         {
@@ -57,34 +59,48 @@
         {
             @foreach (var comment in Model.Comments)
             {
+                var isEditing = Model.EditCommentId == comment.Id;
+
                 <div class="border-bottom mb-2 pb-2">
                     <p class="mb-1">@comment.Content</p>
                     <small class="text-muted">— @comment.Author on @comment.UploadDate.ToString("dd-MM-yyyy")</small>
 
                     @if (comment.Author == User.Identity?.Name)
                     {
-                        <div class="mt-1">
-                            <form method="post" asp-page-handler="DeleteComment" class="d-inline">
+                        <div class="mt-1 d-flex align-items-center gap-2">
+                            <!-- Verwijderen -->
+                            <form method="post" asp-page-handler="DeleteComment">
+                                <input type="hidden" name="id" value="@Model.Artwork.Id" />
                                 <input type="hidden" name="commentId" value="@comment.Id" />
-                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
-                                    🗑
-                                </button>
+                                <button type="submit" class="icon-button text-black" title="Delete">🗑</button>
                             </form>
-                            <form method="post" asp-page-handler="EditComment" class="d-inline ms-2">
-                                <input type="hidden" name="commentId" value="@comment.Id" />
-                                <input type="text" name="newContent" class="form-control d-inline w-auto" value="@comment.Content" />
-                                <button type="submit" class="btn btn-sm btn-outline-primary" title="Update">
-                                    ✏️
-                                </button>
-                            </form>
+
+                            @if (!isEditing)
+                            {
+                                <!-- Bewerken starten -->
+                                <form method="get">
+                                    <input type="hidden" name="id" value="@Model.Artwork.Id" />
+                                    <input type="hidden" name="editCommentId" value="@comment.Id" />
+                                    <button type="submit" class="icon-button text-black" title="Edit">✏️</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <!-- Bewerkmodus -->
+                                <form method="post" asp-page-handler="EditComment" class="d-flex align-items-center gap-2">
+                                    <input type="hidden" name="id" value="@Model.Artwork.Id" />
+                                    <input type="hidden" name="commentId" value="@comment.Id" />
+                                    <input type="text" name="newContent" value="@comment.Content" class="form-control form-control-sm" />
+                                    <button type="submit" class="icon-button text-black" title="Save">💾</button>
+                                </form>
+                            }
                         </div>
                     }
                 </div>
             }
-
-            }
-
-        
+        }
+    </div>
+</div>
 
         <!-- 📝 Comment Submission -->
         <form method="post" asp-page-handler="AddComment">

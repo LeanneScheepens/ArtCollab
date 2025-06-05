@@ -30,13 +30,18 @@ namespace ArtCollab.Pages
 
         [BindProperty]
         public int SelectedCollectionId { get; set; }
+
         [BindProperty]
         public int CommentId { get; set; }
 
         [BindProperty]
         public string NewContent { get; set; }
+
         [BindProperty]
         public string NewCommentContent { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int? EditCommentId { get; set; }
 
         public List<Logic.Models.Collection> UserCollections { get; set; } = new();
 
@@ -54,18 +59,6 @@ namespace ArtCollab.Pages
             return Page();
         }
 
-        public IActionResult OnPostAddComment(int id)
-        {
-            if (string.IsNullOrWhiteSpace(NewCommentContent))
-                return RedirectToPage(new { id });
-
-            var author = User.Identity?.Name ?? "Anonymous";
-            var comment = new Comment(0, id, NewCommentContent, author, DateTime.Now);
-
-            _commentManager.AddComment(comment);
-
-            return RedirectToPage(new { id });
-        }
         public IActionResult OnPost(int id)
         {
             Artwork = _artworkManager.GetArtworkById(id);
@@ -91,13 +84,27 @@ namespace ArtCollab.Pages
 
             return RedirectToPage(new { id });
         }
+
+        public IActionResult OnPostAddComment(int id)
+        {
+            if (string.IsNullOrWhiteSpace(NewCommentContent))
+                return RedirectToPage(new { id });
+
+            var author = User.Identity?.Name ?? "Anonymous";
+            var comment = new Comment(0, id, NewCommentContent, author, DateTime.Now);
+
+            _commentManager.AddComment(comment);
+
+            return RedirectToPage(new { id });
+        }
+
         public IActionResult OnPostDeleteComment(int id, int commentId)
         {
             var user = User.Identity?.Name;
             var comment = _commentManager.GetCommentsByArtworkId(id).FirstOrDefault(c => c.Id == commentId);
 
             if (comment == null || comment.Author != user)
-                return Forbid(); // 403 - niet toegestaan
+                return Forbid();
 
             _commentManager.DeleteComment(commentId);
             return RedirectToPage(new { id });
@@ -112,7 +119,7 @@ namespace ArtCollab.Pages
             var comment = _commentManager.GetCommentsByArtworkId(id).FirstOrDefault(c => c.Id == commentId);
 
             if (comment == null || comment.Author != user)
-                return Forbid(); // 403 - niet toegestaan
+                return Forbid();
 
             comment.Content = newContent;
             comment.UploadDate = DateTime.Now;
@@ -121,6 +128,5 @@ namespace ArtCollab.Pages
 
             return RedirectToPage(new { id });
         }
-
     }
 }
