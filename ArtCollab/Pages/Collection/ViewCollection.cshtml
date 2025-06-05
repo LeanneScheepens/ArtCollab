@@ -20,14 +20,17 @@ else
         @foreach (var artwork in Model.Collection.Artworks)
         {
             <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <img src="@artwork.ImageUrl" class="card-img-top" alt="@artwork.Title" />
-                    <div class="card-body">
-                        <h5 class="card-title">@artwork.Title</h5>
-                        <p class="card-text">@artwork.Description</p>
-                        <p class="card-text"><small>@artwork.UploadDate.ToString("dd-MM-yyyy")</small></p>
+                <a asp-page="/ArtworkViewDetail" asp-route-id="@artwork.Id" class="text-decoration-none text-dark">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@artwork.ImageUrl" class="card-img-top" alt="@artwork.Title" />
+                        <div class="card-body">
+                            <h5 class="card-title">@artwork.Title</h5>
+                            <p class="card-text">@artwork.Description</p>
+                            <p class="card-text"><small>@artwork.UploadDate.ToString("dd-MM-yyyy")</small></p>
+                        </div>
                     </div>
-                </div>
+                </a>
+
             </div>
         }
     </div>
