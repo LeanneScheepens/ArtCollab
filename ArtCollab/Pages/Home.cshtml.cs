@@ -32,5 +32,14 @@ namespace ArtCollab.Pages
                 .Take(PageSize)
                 .ToList();
         }
+        public IActionResult OnPostDelete(int id)
+        {
+            if (!User.IsInRole("Admin"))
+                return Forbid();
+
+            _artworkManager.DeleteArtwork(new List<int> { id });
+            return RedirectToPage(new { PageNumber });
+        }
+
     }
 }
