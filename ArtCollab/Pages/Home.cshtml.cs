@@ -24,8 +24,14 @@ namespace ArtCollab.Pages
 
         public IActionResult OnGet()
         {
-      
-            var allArtworks = _artworkManager.GetArtworks();
+            if (int.TryParse(Request.Query["page"], out int parsedPage))
+            {
+                Page = parsedPage;
+            }
+
+            CurrentPage = Page;
+
+        var allArtworks = _artworkManager.GetArtworks();
             CurrentPage = Page;
             TotalPages = (int)Math.Ceiling(allArtworks.Count / (double)PageSize);
 
