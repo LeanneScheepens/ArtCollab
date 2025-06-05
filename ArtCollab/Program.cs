@@ -108,6 +108,8 @@ app.UseRouting();
 app.UseAuthentication(); // moet vóór UseAuthorization
 app.UseAuthorization();
 
+app.MapRazorPages();
+
 app.MapGet("/", context => {
     context.Response.Redirect("/Home");
     return Task.CompletedTask;
