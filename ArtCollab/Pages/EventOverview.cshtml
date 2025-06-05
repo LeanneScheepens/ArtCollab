@@ -31,7 +31,9 @@
                     {
                         <div class="col-md-3 mb-4 d-flex flex-column align-items-center">
                             <a asp-page="/ArtworkViewDetail" asp-route-id="@artwork.Id" class="text-decoration-none text-dark">
-                                <img src="@artwork.ImageUrl" class="artwork-thumbnail" alt="@artwork.Title" />
+                                <div class="artwork-container">
+                                    <img src="@artwork.ImageUrl" alt="@artwork.Title" />
+                                </div>
                                 <p class="mt-2 fw-bold text-center">@artwork.Title</p>
                             </a>
                         </div>
