@@ -119,13 +119,43 @@ namespace Data
             using (SqlConnection connection = GetConnection())
             {
                 connection.Open();
-                string sql = "DELETE FROM [User] WHERE Id = @Id";
 
-                using var command = new SqlCommand(sql, connection);
-                command.Parameters.AddWithValue("@Id", id);
-                command.ExecuteNonQuery();
+                using var transaction = connection.BeginTransaction();
+
+                try
+                {
+                    var deleteAdminSql = "DELETE FROM Admin WHERE userId = @Id";
+                    using (var adminCmd = new SqlCommand(deleteAdminSql, connection, transaction))
+                    {
+                        adminCmd.Parameters.AddWithValue("@Id", id);
+                        adminCmd.ExecuteNonQuery();
+                    }
+                    // Verwijder eerst gerelateerde Artist-records
+                    var deleteArtistSql = "DELETE FROM Artist WHERE userId = @Id";
+                    using (var artistCmd = new SqlCommand(deleteArtistSql, connection, transaction))
+                    {
+                        artistCmd.Parameters.AddWithValue("@Id", id);
+                        artistCmd.ExecuteNonQuery();
+                    }
+
+                    // Verwijder daarna de gebruiker
+                    var deleteUserSql = "DELETE FROM [User] WHERE Id = @Id";
+                    using (var userCmd = new SqlCommand(deleteUserSql, connection, transaction))
+                    {
+                        userCmd.Parameters.AddWithValue("@Id", id);
+                        userCmd.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    throw; // Hergooi de fout
+                }
             }
         }
+
 
         public void CreateUser(User user)
         {
