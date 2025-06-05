@@ -3,10 +3,12 @@ using Logic.Managers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ArtCollab.Services;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace ArtCollab.Pages
 {
+    [Authorize]
     public class ArtworkEventDetailModel : PageModel
     {
         private readonly ArtworkManager _artworkManager;
@@ -101,14 +103,23 @@ namespace ArtCollab.Pages
         public IActionResult OnPostDeleteComment(int id, int commentId)
         {
             var user = User.Identity?.Name;
-            var comment = _commentManager.GetCommentsByArtworkId(id).FirstOrDefault(c => c.Id == commentId);
+            var isAdmin = User.IsInRole("Admin");
 
-            if (comment == null || comment.Author != user)
+            var comment = _commentManager.GetCommentsByArtworkId(id)
+                                         .FirstOrDefault(c => c.Id == commentId);
+
+            if (comment == null)
+                return NotFound();
+
+            var isOwner = comment.Author == user;
+
+            if (!isOwner && !isAdmin)
                 return Forbid();
 
             _commentManager.DeleteComment(commentId);
             return RedirectToPage(new { id });
         }
+
 
         public IActionResult OnPostEditComment(int id, int commentId, string newContent)
         {

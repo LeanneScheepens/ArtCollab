@@ -65,7 +65,8 @@
                     <p class="mb-1">@comment.Content</p>
                     <small class="text-muted">— @comment.Author on @comment.UploadDate.ToString("dd-MM-yyyy")</small>
 
-                    @if (comment.Author == User.Identity?.Name)
+                    @if (comment.Author == User.Identity?.Name || User.IsInRole("Admin"))
+
                     {
                         <div class="mt-1 d-flex align-items-center gap-2">
                             <!-- Verwijderen -->
@@ -75,7 +76,7 @@
                                 <button type="submit" class="icon-button text-black" title="Delete">🗑</button>
                             </form>
 
-                            @if (!isEditing)
+                           @if (!isEditing && comment.Author == User.Identity?.Name && !User.IsInRole("Admin"))
                             {
                                 <!-- Bewerken starten -->
                                 <form method="get">
@@ -84,7 +85,7 @@
                                     <button type="submit" class="icon-button text-black" title="Edit">✏️</button>
                                 </form>
                             }
-                            else
+                            else if (comment.Author == User.Identity?.Name && !User.IsInRole("Admin"))
                             {
                                 <!-- Bewerkmodus -->
                                 <form method="post" asp-page-handler="EditComment" class="d-flex align-items-center gap-2">
@@ -94,6 +95,7 @@
                                     <button type="submit" class="icon-button text-black" title="Save">💾</button>
                                 </form>
                             }
+
                         </div>
                     }
                 </div>
