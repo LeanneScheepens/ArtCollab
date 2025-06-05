@@ -22,9 +22,9 @@ namespace ArtCollab.Pages
         private const int PageSize = 12;
         public List<Artwork> Artworks { get; set; } = new();
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-            
+      
             var allArtworks = _artworkManager.GetArtworks();
             CurrentPage = Page;
             TotalPages = (int)Math.Ceiling(allArtworks.Count / (double)PageSize);
@@ -33,7 +33,10 @@ namespace ArtCollab.Pages
                 .Skip((Page - 1) * PageSize)
                 .Take(PageSize)
                 .ToList();
+
+            return Page();
         }
+
 
     }
 }
