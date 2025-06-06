@@ -9,14 +9,29 @@
 <div class="d-flex flex-wrap gap-3">
     @foreach (var evt in Model.Events)
     {
-        <form method="get" class="event-card-form">
-            <input type="hidden" name="SelectedEventId" value="@evt.Id" />
-            <button type="submit" class="event-card @(Model.SelectedEventId == evt.Id ? "selected-event" : "")">
-                <strong>@evt.Title</strong>
-            </button>
-        </form>
+        <div class="d-flex align-items-center gap-2">
+            <!-- Selecteer event -->
+            <form method="get" class="event-card-form m-0">
+                <input type="hidden" name="SelectedEventId" value="@evt.Id" />
+                <button type="submit" class="event-card @(Model.SelectedEventId == evt.Id ? "selected-event" : "")">
+                    <strong>@evt.Title</strong>
+                </button>
+            </form>
+
+            <!-- Alleen voor admins: delete event -->
+            @if (User.IsInRole("Admin"))
+            {
+                <form method="post" asp-page-handler="DeleteEvent" asp-route-id="@evt.Id" class="m-0">
+                    <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Are you sure you want to delete the event “@evt.Title”?');"
+                            title="Delete event">
+                        🗑
+                    </button>
+                </form>
+            }
+        </div>
     }
-</div>
+
 
 @if (Model.SelectedEvent != null)
 {

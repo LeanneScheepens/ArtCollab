@@ -138,5 +138,37 @@ namespace Data
                 cmd.ExecuteNonQuery();
             }
         }
+        public void DeleteEvent(int id)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            connection.Open();
+
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                // Verwijder koppelingen in de junction table
+                using (var deleteLinks = new SqlCommand("DELETE FROM EventArtworks WHERE EventId = @Id", connection, transaction))
+                {
+                    deleteLinks.Parameters.AddWithValue("@Id", id);
+                    deleteLinks.ExecuteNonQuery();
+                }
+
+                // Verwijder het event zelf
+                using (var deleteEvent = new SqlCommand("DELETE FROM [Event] WHERE Id = @Id", connection, transaction))
+                {
+                    deleteEvent.Parameters.AddWithValue("@Id", id);
+                    deleteEvent.ExecuteNonQuery();
+                }
+
+                transaction.Commit();
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
+        }
+
     }
 }

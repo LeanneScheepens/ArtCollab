@@ -20,5 +20,10 @@ namespace ArtCollab.Services
         public List<Event> GetAllEvents() => _eventRepository.GetAllEvents();
 
         public Event GetEventById(int id) => _eventRepository.GetEventById(id);
+        public void DeleteEvent(int id)
+        {
+            _eventRepository.DeleteEvent(id);
+        }
+
     }
 }

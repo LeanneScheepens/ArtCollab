@@ -13,5 +13,6 @@ namespace Logic.Interfaces
         List<Event> GetAllEvents();
         Event GetEventById(int id);
         void AddArtworksToEvent(int eventId, List<int> artworkIds);
+        void DeleteEvent(int id);
     }
 }

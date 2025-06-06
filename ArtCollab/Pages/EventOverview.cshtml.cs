@@ -59,5 +59,15 @@ namespace ArtCollab.Pages
 
             return RedirectToPage(new { SelectedEventId = EventId });
         }
+        public IActionResult OnPostDeleteEvent(int id)
+        {
+            if (!User.IsInRole("Admin"))
+                return Forbid();
+
+            _eventManager.DeleteEvent(id);
+
+            return RedirectToPage(); // herlaadt de pagina zonder geselecteerd event
+        }
+
     }
 }
