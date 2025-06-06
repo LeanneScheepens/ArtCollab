@@ -231,3 +231,57 @@ h2 {
         opacity: 0.75;
         transform: scale(1.1);
     }
+
+.form-control {
+    height: 50px;
+    margin-top: 20px;
+}
+
+.form-select {
+    height: 50px;
+    margin-top: 20px;
+}
+
+/* Artwork detail*/
+.back-icon {
+    color: #212529;
+    font-size: 1.5rem;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+    .back-icon:hover {
+        color: #0d6efd; 
+        cursor: pointer;
+    }
+
+.delete-icon {
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    color: black;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    z-index: 100;
+    margin-top: 20px;
+}
+
+    .delete-icon:hover {
+        color: #a71d2a; 
+        cursor: pointer;
+    }
+
+.form-selectAD {
+    width: 165px;
+    height: 40px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.btn-primaryAD {
+    width: 30px;
+    height: 40px;
+    margin-top: 20px;
+    margin-right: 20px;
+}
