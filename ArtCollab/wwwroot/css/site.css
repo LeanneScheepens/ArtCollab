@@ -187,6 +187,8 @@ h2 {
 @media (max-width: 768px) {
     .event-card,
     .filter-btn {
+        width: 15px;
+        height: 10px;
         width: 100%;
         text-align: center;
     }
@@ -195,6 +197,14 @@ h2 {
         font-size: 2rem;
     }
 }
+.btn-xs {
+    width: 24px;
+    height: 20px;
+    font-size: 0.6rem;
+    padding: 0;
+    text-align: center;
+}
+
 
 /* toast notification*/
 .toast-container-top {
@@ -286,8 +296,3 @@ h2 {
     margin-right: 20px;
 }
 
-/*delete button for admin*/
-.delete-event-button {
-    width: 5px;
-    heigth: 5px;
-}
