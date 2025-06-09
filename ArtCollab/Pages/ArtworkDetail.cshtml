@@ -12,7 +12,7 @@
     
     <form method="post" class="d-flex gap-2">
         <select asp-for="SelectedCollectionId" class="form-selectAD">
-            <option value=""> </option>
+            <option value=""> Select event</option>
             @foreach (var collection in Model.UserCollections)
             {
                 <option value="@collection.Id">@collection.Title</option>
