@@ -62,14 +62,13 @@
         {
             @foreach (var comment in Model.Comments)
             {
-                var isEditing = Model.EditCommentId == comment.Id;
+                var isEditing = Model.EditCommentViewModel?.CommentId == comment.Id;
 
                 <div class="border-bottom mb-2 pb-2">
                     <p class="mb-1">@comment.Content</p>
                     <small class="text-muted">— @comment.Author on @comment.UploadDate.ToString("dd-MM-yyyy")</small>
 
                     @if (comment.Author == User.Identity?.Name || User.IsInRole("Admin"))
-
                     {
                         <div class="mt-1 d-flex align-items-center gap-2">
                             <!-- Verwijderen -->
@@ -79,7 +78,7 @@
                                 <button type="submit" class="icon-button text-black" title="Delete">🗑</button>
                             </form>
 
-                           @if (!isEditing && comment.Author == User.Identity?.Name && !User.IsInRole("Admin"))
+                            @if (!isEditing && comment.Author == User.Identity?.Name && !User.IsInRole("Admin"))
                             {
                                 <!-- Bewerken starten -->
                                 <form method="get">
@@ -88,17 +87,16 @@
                                     <button type="submit" class="icon-button text-black" title="Edit">✏️</button>
                                 </form>
                             }
-                            else if (comment.Author == User.Identity?.Name && !User.IsInRole("Admin"))
+                            else if (isEditing)
                             {
                                 <!-- Bewerkmodus -->
                                 <form method="post" asp-page-handler="EditComment" class="d-flex align-items-center gap-2">
                                     <input type="hidden" name="id" value="@Model.Artwork.Id" />
                                     <input type="hidden" name="commentId" value="@comment.Id" />
-                                    <input type="text" name="newContent" value="@comment.Content" class="form-control form-control-sm" />
+                                    <input type="text" asp-for="EditCommentViewModel.Content" value="@comment.Content" class="form-control form-control-sm" />
                                     <button type="submit" class="icon-button text-black" title="Save">💾</button>
                                 </form>
                             }
-
                         </div>
                     }
                 </div>
