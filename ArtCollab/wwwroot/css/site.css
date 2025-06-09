@@ -285,3 +285,9 @@ h2 {
     margin-top: 20px;
     margin-right: 20px;
 }
+
+/*delete button for admin*/
+.delete-event-button {
+    width: 5px;
+    heigth: 5px;
+}
