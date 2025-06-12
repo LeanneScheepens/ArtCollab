@@ -16,19 +16,19 @@
         </div>
         <form method="post">
             <div class="mb-3">
-                <label asp-for="Name" class="form-label"></label>
-                <input asp-for="Name" class="form-control" autocomplete="username" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="Login.Name" class="form-label"></label>
+                <input asp-for="Login.Name" class="form-control" autocomplete="username" />
+                <span asp-validation-for="Login.Name" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" type="password" class="form-control" autocomplete="current-password" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <label asp-for="Login.Password" class="form-label"></label>
+                <input asp-for="Login.Password" type="password" class="form-control" autocomplete="current-password" />
+                <span asp-validation-for="Login.Password" class="text-danger"></span>
             </div>
 
             <div class="form-check mb-3">
-                <input id="KeepLoggedIn" name="KeepLoggedIn" type="checkbox" class="form-check-input" />
+                <input asp-for="Login.KeepLoggedIn" type="checkbox" class="form-check-input" />
                 <label for="KeepLoggedIn" class="form-check-label">Keep me logged in</label>
             </div>
 
@@ -36,8 +36,15 @@
                 <button type="submit" class="btn btn-secondary">Next</button>
                 <button type="button" class="btn btn-light">Stay logged out</button>
             </div>
+            <div class="text-danger">
+                <ul>
+                    @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                </ul>
+            </div>
         </form>
-
 
         <p class="text-muted small mt-3">
             Don't have an account?

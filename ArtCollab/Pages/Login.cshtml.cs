@@ -21,28 +21,24 @@ namespace ArtCollab.Pages
         }
 
         [BindProperty]
-        [Required]
-        public string Name { get; set; }
-
-        [BindProperty]
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public LoginViewModel Login { get; set; } // Gebruik de ViewModel
 
         public async Task<IActionResult> OnPostAsync()
         {
-
             if (!ModelState.IsValid)
                 return Page();
 
+            // Authenticeer de gebruiker
+            var user = await _userManager.AuthenticateUser(Login.Name, Login.Password);
 
-            var user = await _userManager.AuthenticateUser(Name, Password);
+            // Als de gebruiker niet gevonden is, voeg dan een foutmelding toe aan ModelState
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return Page();
+                ModelState.AddModelError(string.Empty, "Invalid username or password.");
+                return Page(); // Dit zorgt ervoor dat de foutmelding wordt weergegeven op de pagina
             }
 
+            // Als authenticatie succesvol is, ga dan verder met inloggen
             var claims = new List<Claim>
     {
         new Claim(ClaimTypes.Name, user.Name),
@@ -54,7 +50,7 @@ namespace ArtCollab.Pages
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-            bool keepLoggedIn = Request.Form["KeepLoggedIn"] == "on";
+            bool keepLoggedIn = Login.KeepLoggedIn;
 
             var authProperties = new AuthenticationProperties
             {
@@ -63,7 +59,6 @@ namespace ArtCollab.Pages
             };
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProperties);
-
 
             return RedirectToPage("/ArtworkOverview");
         }
