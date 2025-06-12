@@ -47,6 +47,7 @@ namespace ArtCollab.Pages
         public int? EditCommentId { get; set; }
 
 
+
         public List<Logic.Models.Collection> UserCollections { get; set; } = new();
 
         public List<Comment> Comments { get; set; } = new();
