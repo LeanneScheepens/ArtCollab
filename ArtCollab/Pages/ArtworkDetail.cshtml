@@ -40,6 +40,80 @@
 <p><strong>Description:</strong> @Model.Artwork.Description</p>
 <p><strong>Uploaded:</strong> @Model.Artwork.UploadDate.ToString("dd-MM-yyyy")</p>
 
+<!-- 💬 Comment Icon Toggle -->
+<button class="btn btn-outline-secondary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#commentsSection">
+    💬 View Comments (@Model.Comments.Count)
+</button>
+
+@{
+    var keepCommentsOpen = Model.EditCommentId.HasValue || Request.Method == "POST" || Model.Comments.Any();
+}
+
+<!-- 📃 Comments Section -->
+<div class="collapse @(keepCommentsOpen ? "show" : "")" id="commentsSection">
+    <div class="card card-body border">
+        @if (!Model.Comments.Any())
+        {
+            <p class="text-muted">No comments yet.</p>
+        }
+        else
+        {
+            @foreach (var comment in Model.Comments)
+            {
+                var isEditing = Model.EditCommentId == comment.Id;
+
+                <div class="border-bottom mb-2 pb-2">
+                    <p class="mb-1">@comment.Content</p>
+                    <small class="text-muted">— @comment.Author on @comment.UploadDate.ToString("dd-MM-yyyy")</small>
+
+                    @if (comment.Author == User.Identity?.Name || User.IsInRole("Admin"))
+                    {
+                        <div class="mt-1 d-flex align-items-center gap-2">
+                            <!-- Verwijderen -->
+                            <form method="post" asp-page-handler="DeleteComment">
+                                <input type="hidden" name="id" value="@Model.Artwork.Id" />
+                                <input type="hidden" name="commentId" value="@comment.Id" />
+                                <button type="submit" class="icon-button text-black" title="Delete">🗑</button>
+                            </form>
+
+                            @if (!isEditing && comment.Author == User.Identity?.Name && !User.IsInRole("Admin"))
+                            {
+                                <!-- Bewerken starten -->
+                                <form method="get">
+                                    <input type="hidden" name="id" value="@Model.Artwork.Id" />
+                                    <input type="hidden" name="editCommentId" value="@comment.Id" />
+                                    <button type="submit" class="icon-button text-black" title="Edit">✏️</button>
+                                </form>
+                            }
+                            else if (comment.Author == User.Identity?.Name && !User.IsInRole("Admin"))
+                            {
+                                <!-- Bewerkmodus -->
+                                <form method="post" asp-page-handler="EditComment" class="d-flex align-items-center gap-2">
+                                    <input type="hidden" name="id" value="@Model.Artwork.Id" />
+                                    <input type="hidden" name="commentId" value="@comment.Id" />
+                                    <input type="text" name="newContent" value="@comment.Content" class="form-control form-control-sm" />
+                                    <button type="submit" class="icon-button text-black" title="Save">💾</button>
+                                </form>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<!-- 📝 Comment Submission -->
+<form method="post" asp-page-handler="AddComment">
+    <div class="input-group mt-3">
+        <input asp-for="NewCommentContent" class="form-control" placeholder="Write a comment..." />
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
+</form>
+    </div>
+</div>
+
+
 <!-- ✅ Toast Notification -->
 @if (!string.IsNullOrWhiteSpace(TempData["SuccessMessage"] as string))
 {
