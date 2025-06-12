@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using ArtCollab.Services;
 using Microsoft.AspNetCore.Authorization;
 using Logic.ViewModels;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace ArtCollab.Pages
