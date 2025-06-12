@@ -178,5 +178,32 @@ namespace Data
                 return null;
             }
         }
+        public void UpdateArtwork(Artwork artwork)
+        {
+            using (SqlConnection connection = GetConnection())
+            {
+                connection.Open();
+
+                string sql = @"
+            UPDATE Artwork
+            SET 
+                title = @Title, 
+                description = @Description, 
+                owner = @Owner, 
+                uploadDate = @UploadDate, 
+                imageUrl = @ImageUrl
+            WHERE id = @Id";
+
+                using var command = new SqlCommand(sql, connection);
+                command.Parameters.AddWithValue("@Id", artwork.Id);
+                command.Parameters.AddWithValue("@Title", artwork.Title);
+                command.Parameters.AddWithValue("@Description", artwork.Description ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@Owner", artwork.Owner);
+                command.Parameters.AddWithValue("@UploadDate", artwork.UploadDate);
+                command.Parameters.AddWithValue("@ImageUrl", artwork.ImageUrl ?? (object)DBNull.Value);
+
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
