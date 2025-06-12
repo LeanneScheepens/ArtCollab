@@ -117,7 +117,13 @@ namespace Data
                     deleteCollectionArtworksCommand.CommandText = "DELETE FROM CollectionArtworks WHERE artworkId = @Id";
                     deleteCollectionArtworksCommand.Parameters.AddWithValue("@Id", id);
                     deleteCollectionArtworksCommand.ExecuteNonQuery();
-
+                  
+                    // Verwijder gekoppelde CommentsARtworks records
+                    var deleteCommentsCommand = connection.CreateCommand();
+                    deleteCommentsCommand.Transaction = transaction;
+                    deleteCommentsCommand.CommandText = "DELETE FROM Comment WHERE artworkId = @Id";
+                    deleteCommentsCommand.Parameters.AddWithValue("@Id", id);
+                    deleteCommentsCommand.ExecuteNonQuery();
 
                     // Verwijder het Artwork zelf
                     var deleteArtworkCommand = connection.CreateCommand();
