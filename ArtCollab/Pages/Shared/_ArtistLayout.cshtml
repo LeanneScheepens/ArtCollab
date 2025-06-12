@@ -43,6 +43,9 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
                     </ul>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/NewArtwork">+New Artwork</a>
+                    </li>
                     <div class="d-flex align-items-center">
                         @if (User.Identity?.IsAuthenticated ?? false)
                         {
