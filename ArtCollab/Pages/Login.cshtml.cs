@@ -63,7 +63,7 @@ namespace ArtCollab.Pages
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProperties);
 
-            return RedirectToPage("/ArtworkOverview");
+            return RedirectToPage("/Home");
         }
     }
 }
