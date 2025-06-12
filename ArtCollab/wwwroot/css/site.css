@@ -20,11 +20,6 @@ body {
     background-attachment: fixed; /* optioneel: zorgt dat achtergrond meescrolt of niet */
 }
 
-.logo {
-    height: 200px;
-    width: auto;
-}
-
 
 /* Focus */
 :focus-visible {
