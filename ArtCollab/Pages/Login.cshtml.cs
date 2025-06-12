@@ -38,13 +38,16 @@ namespace ArtCollab.Pages
                 return Page(); // Dit zorgt ervoor dat de foutmelding wordt weergegeven op de pagina
             }
 
-            // Als authenticatie succesvol is, ga dan verder met inloggen
+            // Controleer of de gebruiker een profielafbeelding heeft
+            var profilePicture = user.ProfilePicture ?? "default.png"; // Als ProfilePicture null is, gebruik "default.png"
+
+            // Claims voor de gebruiker
             var claims = new List<Claim>
     {
         new Claim(ClaimTypes.Name, user.Name),
         new Claim(ClaimTypes.Email, user.Email ?? ""),
         new Claim(ClaimTypes.Role, user.Role.ToString()),
-        new Claim("ProfilePicture", user.ProfilePicture ?? "default.jpg")
+        new Claim("ProfilePicture", profilePicture) // Gebruik de profielafbeelding of de standaardafbeelding
     };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -62,6 +65,5 @@ namespace ArtCollab.Pages
 
             return RedirectToPage("/ArtworkOverview");
         }
-
     }
 }
