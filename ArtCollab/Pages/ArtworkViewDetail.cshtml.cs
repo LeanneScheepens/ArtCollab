@@ -46,8 +46,6 @@ namespace ArtCollab.Pages
         [BindProperty(SupportsGet = true)]
         public int? EditCommentId { get; set; }
 
-        [BindProperty]
-        public EditCommentViewModel EditCommentViewModel { get; set; }
 
         public List<Logic.Models.Collection> UserCollections { get; set; } = new();
 
@@ -56,28 +54,11 @@ namespace ArtCollab.Pages
         public IActionResult OnGet(int id)
         {
             Artwork = _artworkManager.GetArtworkById(id);
-            if (Artwork == null)
-                return RedirectToPage("/ArtworkOverview");
+            if (Artwork == null) return RedirectToPage("/ArtworkOverview");
 
             var owner = User.Identity?.Name;
             UserCollections = _collectionManager.GetCollectionsByOwner(owner);
             Comments = _commentManager.GetCommentsByArtworkId(id);
-
-            // Initialize EditCommentViewModel if editing a comment
-            if (EditCommentId.HasValue)
-            {
-                var comment = Comments.FirstOrDefault(c => c.Id == EditCommentId.Value);
-                if (comment != null)
-                {
-                    EditCommentViewModel = new EditCommentViewModel
-                    {
-                        CommentId = comment.Id,
-                        Content = comment.Content,
-                        Author = comment.Author,
-                        UploadDate = comment.UploadDate
-                    };
-                }
-            }
 
             return Page();
         }
