@@ -13,16 +13,15 @@ html {
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #212529;
-    background-color: #f4f4f2; 
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
+    background-image: url('/images/background.png');
+    background-size: cover; /* of: contain, of: auto afhankelijk wat je wilt */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed; /* optioneel: zorgt dat achtergrond meescrolt of niet */
 }
 
 .logo {
-    height: 100px;
+    height: 200px;
     width: auto;
 }
 
