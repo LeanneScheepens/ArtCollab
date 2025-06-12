@@ -13,5 +13,6 @@ namespace Logic.Interfaces
         List<Artwork> GetArtworks();
         void DeleteArtwork(int id);
         Artwork GetArtworkById(int id);
+        void UpdateArtwork(Artwork artwork);
     }
 }
