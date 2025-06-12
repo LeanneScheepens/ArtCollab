@@ -36,6 +36,10 @@ namespace Logic.Managers
         {
             return GetArtworks().Where(a => a.Owner == owner).ToList();
         }
+        public void UpdateArtwork(Artwork artwork)
+        {
+            _artworkRepository.UpdateArtwork(artwork);
+        }
 
     }
 }
