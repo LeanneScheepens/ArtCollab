@@ -1,0 +1,52 @@
+﻿@page "{id:int}"
+@model ArtCollab.Pages.EditArtworkModel
+@{
+    ViewData["Title"] = "Edit Artwork";
+}
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="w-100" style="max-width: 600px;">
+        <h2 class="text-center mb-4">Edit Artwork</h2>
+
+        <form method="post">
+            <input type="hidden" asp-for="ViewModel.ArtworkId" />
+            <input type="hidden" asp-for="ViewModel.ImageUrl" />
+            <input type="hidden" asp-for="ViewModel.Owner" />
+            <input type="hidden" asp-for="ViewModel.UploadDate" />
+
+            <div class="mb-3">
+                <label>Title</label>
+                <input asp-for="ViewModel.Title" class="form-control" />
+                <span asp-validation-for="ViewModel.Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label>Image URL</label>
+                <input asp-for="ViewModel.ImageUrl" class="form-control" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label>Owner</label>
+                <input asp-for="ViewModel.Owner" class="form-control" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label>Description</label>
+                <textarea asp-for="ViewModel.Description" class="form-control"></textarea>
+                <span asp-validation-for="ViewModel.Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label>Upload Date</label>
+                <input asp-for="ViewModel.UploadDate" class="form-control" type="date" readonly />
+            </div>
+
+            <div class="d-flex justify-content-center mt-4">
+                <button type="submit" class="btn btn-dark btn-custom">Save Artwork</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
