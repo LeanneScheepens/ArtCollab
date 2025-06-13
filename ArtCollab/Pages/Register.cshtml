@@ -33,13 +33,13 @@
 
             <div class="mb-3">
                 <label asp-for="Register.Password" class="form-label"></label>
-                <input asp-for="Register.Password" class="form-control" type="password" autocomplete="new-password" />
+                <input asp-for="Register.Password" class="form-control"  autocomplete="new-password" />
                 <span asp-validation-for="Register.Password" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="Register.ConfirmPassword" class="form-label"></label>
-                <input asp-for="Register.ConfirmPassword" class="form-control" type="password" autocomplete="new-password" />
+                <input asp-for="Register.ConfirmPassword" class="form-control"  autocomplete="new-password" />
                 <span asp-validation-for="Register.ConfirmPassword" class="text-danger"></span>
             </div>
 
@@ -56,3 +56,5 @@
     </div>
     </body>
 </div>
+
+<partial name="_validationScriptsPartial" />
