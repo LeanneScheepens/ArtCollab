@@ -19,7 +19,12 @@
         </select>
         <button type="submit" class="btn btn-primaryAD">Add</button>
     </form>
+    <a asp-page="/EditArtwork" asp-route-id="@Model.Artwork.Id" class="edit-icon" title="Edit artwork">
+        <i class="bi bi-pencil-fill"></i>
+    </a>
+
     <a asp-page="/DeleteArtwork" asp-route-id="@Model.Artwork.Id" class="delete-icon" title="Delete artwork"> <i class="bi bi-trash3-fill"></i> </a>
+
 </div>
 
 <h2>@Model.Artwork.Title</h2>
