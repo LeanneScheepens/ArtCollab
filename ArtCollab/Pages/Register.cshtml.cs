@@ -26,14 +26,10 @@ namespace ArtCollab.Pages
             if (!ModelState.IsValid)
                 return Page();
 
-            var user = new User(0, Register.Name, Register.Email, Register.Password, null, null)
-            {
-                Role = Role.Artist
-            };
-
-            _userManager.CreateUser(user);
+            _userManager.CreateUser(Register, Role.Artist);
 
             return RedirectToPage("/Home");
-        }
+        
+    }
     }
 }

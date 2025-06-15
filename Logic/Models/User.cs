@@ -18,6 +18,10 @@
         public string Biography { get; set; }
         public Role Role { get; set; }
 
+        public User ()
+        {
+    
+        }
         public User(int id, string name, string email, string password, string profilePicture, string biography)
         {
             Id = id;

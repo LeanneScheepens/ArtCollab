@@ -40,6 +40,8 @@ namespace ArtCollab.Pages
         [Compare(nameof(Password), ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; }
 
+        public RegisterViewModel Register { get; set; }
+
         public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
@@ -63,7 +65,7 @@ namespace ArtCollab.Pages
                 Role = Role.Admin
             };
 
-            _userManager.CreateUser(admin);
+            _userManager.CreateUser(Register, Role.Admin);
 
             return RedirectToPage("/Privacy");
         }

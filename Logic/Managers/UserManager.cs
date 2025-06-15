@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Logic.Models;
 using Logic.Interfaces;
 using Logic.Utils;
+using Logic.ViewModels;
 
 namespace Logic.Managers
 {
@@ -42,18 +43,21 @@ namespace Logic.Managers
                 return false;
             }
         }
+        public void CreateUser(RegisterViewModel registerViewModel, Role role)
+        {
+            var user = new User(0, registerViewModel.Name, registerViewModel.Email, registerViewModel.Password, null, null);
 
-
-        public void CreateUser(User user)
-            {
             if (!IsBase64Valid(user.Password))
             {
-                // Hash het wachtwoord als het geen geldige hash is
                 user.Password = PasswordHelper.HashPassword(user.Password);
             }
 
+            user.Role = role;
+
             _userRepository.CreateUser(user);
         }
+
+
 
         public User GetUserByName(string name)
         {
