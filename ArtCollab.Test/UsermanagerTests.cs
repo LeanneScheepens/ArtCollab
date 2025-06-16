@@ -1,0 +1,91 @@
+using Xunit;
+using Moq;
+using Logic.Managers;
+using Logic.Models;
+using Logic.ViewModels;
+using Logic.Interfaces;
+using System;
+
+
+namespace ArtCollab.Test;
+
+
+public class UsermanagerTests
+{
+    //If the Username already excist
+    [Fact]
+    public void CreateUser_ShouldThrow_WhenUsernameAlreadyExists()
+    {
+        // Arrange
+        var mockRepo = new Mock<IUserRepository>();
+
+        // Stel het gedrag in: username bestaat al
+        mockRepo.Setup(repo => repo.GetUserByName("existinguser"))
+                .Returns(new User(1, "existinguser", "test@test.com", "hashedpwd", null, null));
+
+        var userManager = new UserManager(mockRepo.Object); // Hier jouw eigen manager class
+
+        var viewModel = new RegisterViewModel
+        {
+            Name = "existinguser",
+            Email = "newemail@test.com",
+            Password = "SomePassword123",
+            ConfirmPassword = "SomePassword123"
+        };
+
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentException>(() => userManager.CreateUser(viewModel, Role.Artist));
+        Assert.Equal("Username already exists.", exception.Message);
+    }
+    //if validation fails
+    [Fact]
+    public void CreateUser_ShouldThrow_WhenViewModelIsInvalid()
+    {
+        var mockRepo = new Mock<IUserRepository>();
+        var userManager = new UserManager(mockRepo.Object);
+
+        var viewModel = new RegisterViewModel
+        {
+            Name = "", // Ongeldig, Required
+            Email = "invalidemail",
+            Password = "pwd",
+            ConfirmPassword = "pwd"
+        };
+
+        var exception = Assert.Throws<ArgumentException>(() => userManager.CreateUser(viewModel, Role.Artist));
+
+        Assert.Contains("Validation error", exception.Message);
+    }
+    //Valid user is saved 
+    [Fact]
+    public void CreateUser_ShouldCallRepository_WhenValid()
+    {
+        var mockRepo = new Mock<IUserRepository>();
+        mockRepo.Setup(repo => repo.GetUserByName(It.IsAny<string>())).Returns((User)null);
+
+        var userManager = new UserManager(mockRepo.Object);
+
+        var viewModel = new RegisterViewModel
+        {
+            Name = "newuser",
+            Email = "test@test.com",
+            Password = "SomePassword123",
+            ConfirmPassword = "SomePassword123"
+        };
+
+        userManager.CreateUser(viewModel, Role.Artist);
+
+        mockRepo.Verify(repo => repo.CreateUser(It.IsAny<User>()), Times.Once);
+    }
+    //if the viewmodel is null
+    [Fact]
+    public void CreateUser_ShouldThrow_WhenViewModelIsNull()
+    {
+        var mockRepo = new Mock<IUserRepository>();
+        var userManager = new UserManager(mockRepo.Object);
+
+        Assert.Throws<ArgumentNullException>(() => userManager.CreateUser(null, Role.Artist));
+    }
+
+}
+
