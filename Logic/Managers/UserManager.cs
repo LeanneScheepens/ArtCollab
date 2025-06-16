@@ -82,17 +82,6 @@ namespace Logic.Managers
             return Task.FromResult<User>(null);
         }
 
-        public void RegisterUser(User user)
-        {
-            user.Password = PasswordHelper.HashPassword(user.Password);
-            _userRepository.CreateUser(user);
-        }
-
-        public bool ValidateLogin(string name, string password)
-        {
-            var user = _userRepository.GetUserByName(name);
-            return user != null && PasswordHelper.VerifyPassword(password, user.Password);
-        }
         public void UpdateUser(User user)
         {
             _userRepository.UpdateUser(user);
