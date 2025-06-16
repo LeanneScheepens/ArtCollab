@@ -26,7 +26,7 @@ namespace ArtCollab.Pages
         {
             var artwork = _artworkManager.GetArtworkById(id);
             if (artwork == null)
-            {
+            {  
                 return NotFound();
             }
 
@@ -49,22 +49,16 @@ namespace ArtCollab.Pages
             {
                 return Page();
             }
-
-            var existingArtwork = _artworkManager.GetArtworkById(ViewModel.ArtworkId);
-            if (existingArtwork == null)
+            try
+            {
+                _artworkManager.UpdateArtwork(ViewModel);
+            }
+            catch (ArgumentNullException)
             {
                 return NotFound();
             }
 
-            existingArtwork.Title = ViewModel.Title;
-            existingArtwork.ImageUrl = ViewModel.ImageUrl;
-            existingArtwork.Owner = ViewModel.Owner;
-            existingArtwork.Description = ViewModel.Description;
-            existingArtwork.UploadDate = ViewModel.UploadDate;
-
-            _artworkManager.UpdateArtwork(existingArtwork);
-
-            return RedirectToPage("./ArtworkDetail", new { id = existingArtwork.Id });
+            return RedirectToPage("./ArtworkDetail", new { id = ViewModel.ArtworkId });
 
         }
     }
