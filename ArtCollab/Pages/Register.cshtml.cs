@@ -24,8 +24,10 @@ namespace ArtCollab.Pages
         public async Task<IActionResult> OnPost()
         {
             if (!ModelState.IsValid)
+            {
                 return Page();
-
+            }
+       
             _userManager.CreateUser(Register, Role.Artist);
 
             return RedirectToPage("/Home");
