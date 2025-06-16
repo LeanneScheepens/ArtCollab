@@ -19,24 +19,25 @@ public class UsermanagerTests
         // Arrange
         var mockRepo = new Mock<IUserRepository>();
 
-        // Stel het gedrag in: username bestaat al
+        // Simuleer dat de username al bestaat
         mockRepo.Setup(repo => repo.GetUserByName("existinguser"))
                 .Returns(new User(1, "existinguser", "test@test.com", "hashedpwd", null, null));
 
-        var userManager = new UserManager(mockRepo.Object); // Hier jouw eigen manager class
+        var userManager = new UserManager(mockRepo.Object);
 
         var viewModel = new RegisterViewModel
         {
             Name = "existinguser",
-            Email = "newemail@test.com",
-            Password = "SomePassword123",
-            ConfirmPassword = "SomePassword123"
+            Email = "test@test.com",
+            Password = "SomePassword1234",
+            ConfirmPassword = "SomePassword1234"
         };
 
         // Act & Assert
         var exception = Assert.Throws<ArgumentException>(() => userManager.CreateUser(viewModel, Role.Artist));
         Assert.Equal("Username already exists.", exception.Message);
     }
+
     //if validation fails
     [Fact]
     public void CreateUser_ShouldThrow_WhenViewModelIsInvalid()
@@ -69,8 +70,8 @@ public class UsermanagerTests
         {
             Name = "newuser",
             Email = "test@test.com",
-            Password = "SomePassword123",
-            ConfirmPassword = "SomePassword123"
+            Password = "SomePassword1234",
+            ConfirmPassword = "SomePassword1234"
         };
 
         userManager.CreateUser(viewModel, Role.Artist);
@@ -86,6 +87,8 @@ public class UsermanagerTests
 
         Assert.Throws<ArgumentNullException>(() => userManager.CreateUser(null, Role.Artist));
     }
+
+    //password check
 
 }
 
