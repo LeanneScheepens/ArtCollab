@@ -27,11 +27,19 @@ namespace ArtCollab.Pages
             {
                 return Page();
             }
-       
-            _userManager.CreateUser(Register, Role.Artist);
 
-            return RedirectToPage("/Home");
-        
-    }
+            try
+            {
+                _userManager.CreateUser(Register, Role.Artist);
+                return RedirectToPage("/Home");
+            }
+            catch (ArgumentException ex)
+            {
+                // Hier wordt de foutmelding netjes aan de pagina gekoppeld
+                ModelState.AddModelError("Register.Name", ex.Message);
+
+                return Page();
+            }
+        }
     }
 }
