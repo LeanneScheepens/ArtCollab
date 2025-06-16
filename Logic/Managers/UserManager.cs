@@ -7,6 +7,7 @@ using Logic.Models;
 using Logic.Interfaces;
 using Logic.Utils;
 using Logic.ViewModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace Logic.Managers
 {
@@ -31,28 +32,32 @@ namespace Logic.Managers
                     _userRepository.DeleteUser(id);
                 }
             }
-        private bool IsBase64Valid(string base64)
-        {
-            try
-            {
-                var data = Convert.FromBase64String(base64);
-                return data.Length >= 48; // salt + hash
-            }
-            catch
-            {
-                return false;
-            }
-        }
+
         public void CreateUser(RegisterViewModel registerViewModel, Role role)
         {
-            var user = new User(0, registerViewModel.Name, registerViewModel.Email, registerViewModel.Password, null, null);
+     
+            var validationContext = new ValidationContext(registerViewModel);
+            var validationResults = new List<ValidationResult>();
 
-            if (!IsBase64Valid(user.Password))
+            bool isValid = Validator.TryValidateObject(registerViewModel, validationContext, validationResults, true);
+
+            if (!isValid)
             {
-                user.Password = PasswordHelper.HashPassword(user.Password);
+                string errorMessages = string.Join("; ", validationResults.Select(r => r.ErrorMessage));
+                throw new ArgumentException($"Validation error: {errorMessages}");
             }
 
+            var user = new User(0, registerViewModel.Name, registerViewModel.Email, registerViewModel.Password, null, null);
+
+            user.Password = PasswordHelper.HashPassword(user.Password);
+           
             user.Role = role;
+
+            var existingUser = _userRepository.GetUserByName(registerViewModel.Name);
+            if (existingUser != null)
+            {
+                throw new ArgumentException("Username already exists.");
+            }
 
             _userRepository.CreateUser(user);
         }

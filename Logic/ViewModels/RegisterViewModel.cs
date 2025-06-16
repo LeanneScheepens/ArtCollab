@@ -38,12 +38,7 @@ namespace Logic.ViewModels
                 yield return new ValidationResult("Password must contain at least 4 digits and 3 letters.", new[] { "Password" });
             }
 
-            var userManager = (UserManager)validationContext.GetService(typeof(UserManager));
-            var existingUser = userManager.GetUserByName(Name);
-            if (existingUser != null)
-            {
-                yield return new ValidationResult("Username already exists.", new[] { "Name" });
-            }
+
         }
 
         private bool IsValidPassword(string password)
