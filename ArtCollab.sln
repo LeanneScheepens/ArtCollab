@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{FA76D2CD-B28D-4B3A-A7D3-0E2C3B2C1C4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArtCollab.Test", "ArtCollab.Test\ArtCollab.Test.csproj", "{82877792-FDBE-4CAA-B1CA-51CD8B86BEB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FA76D2CD-B28D-4B3A-A7D3-0E2C3B2C1C4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA76D2CD-B28D-4B3A-A7D3-0E2C3B2C1C4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA76D2CD-B28D-4B3A-A7D3-0E2C3B2C1C4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82877792-FDBE-4CAA-B1CA-51CD8B86BEB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82877792-FDBE-4CAA-B1CA-51CD8B86BEB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82877792-FDBE-4CAA-B1CA-51CD8B86BEB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82877792-FDBE-4CAA-B1CA-51CD8B86BEB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
