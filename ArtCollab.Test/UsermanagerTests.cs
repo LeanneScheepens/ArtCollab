@@ -5,6 +5,7 @@ using Logic.Models;
 using Logic.ViewModels;
 using Logic.Interfaces;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace ArtCollab.Test;
@@ -16,10 +17,9 @@ public class UsermanagerTests
     [Fact]
     public void CreateUser_ShouldThrow_WhenUsernameAlreadyExists()
     {
-        // Arrange
         var mockRepo = new Mock<IUserRepository>();
 
-        // Simuleer dat de username al bestaat
+       // make sure the username already excist
         mockRepo.Setup(repo => repo.GetUserByName("existinguser"))
                 .Returns(new User(1, "existinguser", "test@test.com", "hashedpwd", null, null));
 
@@ -33,7 +33,7 @@ public class UsermanagerTests
             ConfirmPassword = "SomePassword1234"
         };
 
-        // Act & Assert
+
         var exception = Assert.Throws<ArgumentException>(() => userManager.CreateUser(viewModel, Role.Artist));
         Assert.Equal("Username already exists.", exception.Message);
     }
@@ -47,7 +47,7 @@ public class UsermanagerTests
 
         var viewModel = new RegisterViewModel
         {
-            Name = "", // Ongeldig, Required
+            Name = "", // shouldn't work
             Email = "invalidemail",
             Password = "pwd",
             ConfirmPassword = "pwd"
@@ -88,7 +88,25 @@ public class UsermanagerTests
         Assert.Throws<ArgumentNullException>(() => userManager.CreateUser(null, Role.Artist));
     }
 
-    //password check
+    //password check,this is in the viewmodel and not in the manager
+    [Fact]
+    public void Validate_ShouldReturnError_WhenPasswordsDoNotMatch()
+    {
+  
+        var viewModel = new RegisterViewModel
+        {
+            Name = "testuser",
+            Email = "test@test.com",
+            Password = "SomePassword1234",
+            ConfirmPassword = "DifferentPassword1234"
+        };
+
+
+        var results = viewModel.Validate(new ValidationContext(viewModel)).ToList();
+
+        Assert.Contains(results, r => r.ErrorMessage == "Passwords do not match.");
+    }
+
 
 }
 
