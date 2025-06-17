@@ -5,24 +5,24 @@ namespace Logic.Managers
 {
     public class CollectionManager
     {
-        private readonly ICollectionRepository _repo;
+        private readonly ICollectionRepository _collectionrepository;
 
-        public CollectionManager(ICollectionRepository repo)
+        public CollectionManager(ICollectionRepository Collectionrepository)
         {
-            _repo = repo;
+            _collectionrepository = Collectionrepository;
         }
 
-        public void CreateCollection(Collection collection) => _repo.CreateCollection(collection);
+        public void CreateCollection(Collection collection) => _collectionrepository.CreateCollection(collection);
 
-        public List<Collection> GetCollectionsByOwner(string owner) => _repo.GetCollectionsByOwner(owner);
+        public List<Collection> GetCollectionsByOwner(string owner) => _collectionrepository.GetCollectionsByOwner(owner);
 
         public void AddArtworkToCollection(int collectionId, int artworkId)
         {
-            _repo.AddArtworkToCollectionIfNotExists(collectionId, artworkId);
+            _collectionrepository.AddArtworkToCollectionIfNotExists(collectionId, artworkId);
         }
         public void DeleteCollection(int collectionId, string owner)
         {
-            _repo.DeleteCollection(collectionId, owner);
+            _collectionrepository.DeleteCollection(collectionId, owner);
         }
         public bool ArtworkExistsInCollection(int collectionId, int artworkId)
         {
@@ -31,6 +31,6 @@ namespace Logic.Managers
         }
 
 
-        public Collection GetCollectionById(int id) => _repo.GetCollectionById(id);
+        public Collection GetCollectionById(int id) => _collectionrepository.GetCollectionById(id);
     }
 }

@@ -9,7 +9,7 @@ namespace Logic.Models
 {
     public class Admin : User
     {
-        public Role Role { get; set; }
+
 
         public Admin(int id, string name, string email, string password, string profilePicture, string biography, int role) : base(id, name, email, password, profilePicture, biography)
         {

@@ -12,7 +12,7 @@ namespace ArtCollab.Services
             _repository = repository;
         }
 
-        public void AddComment(Comment comment)
+        public void CreateComment(Comment comment)
         {
             if (string.IsNullOrWhiteSpace(comment.Content))
                 throw new ArgumentException("Comment content cannot be empty.");

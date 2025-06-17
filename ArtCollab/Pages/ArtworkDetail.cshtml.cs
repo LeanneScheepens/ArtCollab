@@ -62,7 +62,7 @@ namespace ArtCollab.Pages
             var author = User.Identity?.Name ?? "Anonymous";
             var comment = new Comment(0, id, NewCommentContent, author, DateTime.Now);
 
-            _commentManager.AddComment(comment);
+            _commentManager.CreateComment(comment);
             return RedirectToPage(new { id });
         }
         public IActionResult OnPostDeleteComment(int id, int commentId)

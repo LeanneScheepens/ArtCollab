@@ -10,7 +10,7 @@ namespace Logic.Models
 {
     public class Artist : User
     {
-        public Role Role { get; set; }
+
 
         public Artist(int id, string name, string email, string password, string profilePicture, string biography, int role) : base(id, name, email, password, profilePicture, biography)
         {
