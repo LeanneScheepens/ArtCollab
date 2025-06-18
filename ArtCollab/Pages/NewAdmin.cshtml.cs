@@ -7,7 +7,9 @@ using Logic.Models;
 using Logic.ViewModels;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace ArtCollab.Pages
 {
@@ -22,52 +24,63 @@ namespace ArtCollab.Pages
         }
 
         [BindProperty]
-        [Required]
-        public string Name { get; set; }
+        public RegisterViewModel ViewModel { get; set; }
 
-        [BindProperty]
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [BindProperty]
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        [BindProperty]
-        [Required]
-        [Compare(nameof(Password), ErrorMessage = "Passwords do not match.")]
-        public string ConfirmPassword { get; set; }
-
-        public RegisterViewModel Register { get; set; }
-
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (!ModelState.IsValid)
-                return Page();
-
-            if (!IsValidPassword(Password))
             {
-                ModelState.AddModelError("Password", "Password must contain at least 4 digits and 3 letters.");
                 return Page();
             }
 
-            var existing = _userManager.GetUserByName(Name);
-            if (existing != null)
+            try
             {
-                ModelState.AddModelError("Name", "Username already exists.");
+                if (!IsValidPassword(ViewModel.Password))
+                {
+                    ModelState.AddModelError("ViewModel.Password", "Password must contain at least 4 digits and 3 letters.");
+                    return Page();
+                }
+
+                var existingUser = _userManager.GetUserByName(ViewModel.Name);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("ViewModel.Name", "Username already exists.");
+                    return Page();
+                }
+
+                var admin = new User(0, ViewModel.Name, ViewModel.Email, ViewModel.Password, null, null)
+                {
+                    Role = Role.Admin
+                };
+
+                _userManager.CreateUser(ViewModel, Role.Admin);  // Create the user in the database
+
+                // Authenticate the user after registration
+                var profilePicture = admin.ProfilePicture ?? "default.png";
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, admin.Name),
+                    new Claim(ClaimTypes.Email, admin.Email ?? ""),
+                    new Claim(ClaimTypes.Role, admin.Role.ToString()),
+                    new Claim("ProfilePicture", profilePicture)
+                };
+
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+
+                // Sign the user in
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                // Redirect to the Admin Dashboard or other page after successful login
+                return RedirectToPage("/UserOverview");
+            }
+            catch (ArgumentException ex)
+            {
+                // Handle any errors, for example, username already exists
+                ModelState.AddModelError("ViewModel.Name", ex.Message);
                 return Page();
             }
-
-            var admin = new User(0, Name, Email, Password, null, null)
-            {
-                Role = Role.Admin
-            };
-
-            _userManager.CreateUser(Register, Role.Admin);
-
-            return RedirectToPage("/Privacy");
         }
 
         private bool IsValidPassword(string password)
@@ -78,4 +91,3 @@ namespace ArtCollab.Pages
         }
     }
 }
-
