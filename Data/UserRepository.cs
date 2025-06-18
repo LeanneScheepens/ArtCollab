@@ -218,6 +218,9 @@ namespace Data
             using var connection = GetConnection();
             connection.Open();
 
+            // Set ProfilePicture to "default.png" if it's null
+            string profilePicture = user.ProfilePicture ?? "default.png";
+
             string sql = @"
         UPDATE [User]
         SET Email = @Email,
@@ -226,13 +229,14 @@ namespace Data
         WHERE Name = @Name";
 
             using var command = new SqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@Email", user.Email ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@Email", user.Email);
             command.Parameters.AddWithValue("@Biography", user.Biography ?? (object)DBNull.Value);
-            command.Parameters.AddWithValue("@ProfilePicture", user.ProfilePicture ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@ProfilePicture", profilePicture); // Use profilePicture here
             command.Parameters.AddWithValue("@Name", user.Name);
 
             command.ExecuteNonQuery();
         }
+
 
 
     }
