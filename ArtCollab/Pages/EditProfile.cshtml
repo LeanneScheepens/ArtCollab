@@ -7,10 +7,11 @@
 <h3>Edit Profile</h3>
 
 <form method="post" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-    </div>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" readonly />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
 
     <div class="mb-3">
         <label asp-for="Biography" class="form-label"></label>

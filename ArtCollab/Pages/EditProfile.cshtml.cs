@@ -35,7 +35,10 @@ namespace ArtCollab.Pages
             var user = _userManager.GetUserByName(User.Identity.Name);
             if (user == null) return RedirectToPage("/Login");
 
-            user.Email = Email;
+            // Ensure we don't overwrite the email (since it's read-only and can't be modified)
+            user.Email = user.Email;  // Ensuring that the email remains the same
+
+            // Update the Biography and ProfilePicture
             user.Biography = Biography;
 
             if (ProfileImage != null)
@@ -47,10 +50,11 @@ namespace ArtCollab.Pages
                 user.ProfilePicture = fileName;
             }
 
+            // Update the user in the database
             _userManager.UpdateUser(user);
 
-            // ?? Sessies vernieuwen met nieuwe claims
-             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            // Refresh session with new claims
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             var claims = new List<Claim>
     {
@@ -65,8 +69,8 @@ namespace ArtCollab.Pages
 
             HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-
             return RedirectToPage("/Index");
         }
+
     }
 }
